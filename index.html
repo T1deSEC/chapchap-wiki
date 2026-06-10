@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#135bec',
+            'bg-light': '#f6f6f8',
+            'bg-dark': '#101622',
+          },
+          fontFamily: {
+            sans: ['Noto Sans KR', 'Manrope', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <style>
+    body { font-family: 'Noto Sans KR', 'Manrope', sans-serif; }
+    .sidebar-link { display: block; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #374151; transition: background 0.15s, color 0.15s; }
+    .sidebar-link:hover { background: #eff6ff; color: #135bec; }
+    .sidebar-link.active { background: #eff6ff; color: #135bec; font-weight: 600; }
+    .sidebar-group-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; padding: 0.5rem 0.75rem 0.25rem; }
+    pre code.hljs { border-radius: 0.5rem; font-size: 0.85rem; }
+    .note-box { background: #eff6ff; border-left: 3px solid #135bec; padding: 0.75rem 1rem; border-radius: 0 0.375rem 0.375rem 0; font-size: 0.9rem; }
+    .warn-box { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 0 0.375rem 0.375rem 0; font-size: 0.9rem; }
+  </style>
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="index.html" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="index.html" class="sidebar-link active">홈</a>
+        <a href="getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="architecture.html" class="sidebar-link">시스템 아키텍처</a>
+
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+
+        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+
+        <!-- Hero -->
+        <div class="bg-bg-dark rounded-2xl px-10 py-12 mb-10 text-white">
+          <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-3">CHAPCHAP Docs</p>
+          <h1 class="text-4xl font-bold mb-4 leading-tight">한국 뷰티 플랫폼<br/>기술 문서</h1>
+          <p class="text-gray-300 text-lg mb-8">AI 기반 성분 분석, 루틴 충돌 진단, 개인화 제품 추천을<br/>제공하는 CHAPCHAP의 기술 레퍼런스입니다.</p>
+          <div class="flex gap-3 flex-wrap">
+            <a href="getting-started.html" class="bg-primary hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">시작하기</a>
+            <a href="api/auth-user.html" class="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">API 레퍼런스</a>
+            <a href="philosophy/ingredient-ranking.html" class="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">AI 설계 철학</a>
+          </div>
+        </div>
+
+        <!-- Feature cards -->
+        <h2 class="text-xl font-bold mb-5 text-bg-dark">핵심 기능</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+          <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+            <div class="text-3xl mb-3">🧴</div>
+            <h3 class="font-bold text-base mb-2">AI 성분 분석</h3>
+            <p class="text-gray-500 text-sm">LLM 기반 피부 맞춤 안전도 평가. concern_score → safety_level 고정 임계값 매핑.</p>
+          </div>
+          <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+            <div class="text-3xl mb-3">🔄</div>
+            <h3 class="font-bold text-base mb-2">루틴 충돌 진단</h3>
+            <p class="text-gray-500 text-sm">AM/PM 루틴 성분 충돌을 LangGraph 에이전트로 검출, conflict 시 자동 알림.</p>
+          </div>
+          <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+            <div class="text-3xl mb-3">📊</div>
+            <h3 class="font-bold text-base mb-2">개인화 제품 추천</h3>
+            <p class="text-gray-500 text-sm">함량 기반 match_score 랭킹. 기피 성분 포함 제품 완전 차단.</p>
+          </div>
+        </div>
+
+        <!-- Tech stack badges -->
+        <h2 class="text-xl font-bold mb-4 text-bg-dark">기술 스택</h2>
+        <div class="flex flex-wrap gap-2 mb-10">
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Spring Boot 3.3.4</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">React + TypeScript</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">PostgreSQL 16</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Python LangGraph</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Docker</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Vite + TailwindCSS</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">TanStack Query v5</span>
+          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Flyway</span>
+        </div>
+
+        <!-- Quick links -->
+        <h2 class="text-xl font-bold mb-4 text-bg-dark">빠른 링크</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <a href="getting-started.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">시작하기 →</div>
+            <div class="text-gray-500 text-xs mt-1">Docker, 환경변수 설정, 스모크 테스트</div>
+          </a>
+          <a href="architecture.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">시스템 아키텍처 →</div>
+            <div class="text-gray-500 text-xs mt-1">레이어 다이어그램, DB 스키마, JWT 흐름</div>
+          </a>
+          <a href="api/auth-user.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">API 레퍼런스 →</div>
+            <div class="text-gray-500 text-xs mt-1">인증·제품·루틴·피드백·추천·알림 엔드포인트</div>
+          </a>
+          <a href="philosophy/ingredient-ranking.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">AI 설계 철학 →</div>
+            <div class="text-gray-500 text-xs mt-1">match_score 공식, 안전도 점수 계산 원리</div>
+          </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

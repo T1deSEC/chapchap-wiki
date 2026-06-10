@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>알림 &amp; 홈 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <style>
+    body { font-family: 'Noto Sans KR', 'Manrope', sans-serif; }
+    .sidebar-link { display: block; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #374151; transition: background 0.15s, color 0.15s; }
+    .sidebar-link:hover { background: #eff6ff; color: #135bec; }
+    .sidebar-link.active { background: #eff6ff; color: #135bec; font-weight: 600; }
+    .sidebar-group-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; padding: 0.5rem 0.75rem 0.25rem; }
+    pre code.hljs { border-radius: 0.5rem; font-size: 0.85rem; }
+    .note-box { background: #eff6ff; border-left: 3px solid #135bec; padding: 0.75rem 1rem; border-radius: 0 0.375rem 0.375rem 0; font-size: 0.9rem; margin-bottom: 1rem; }
+    .warn-box { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 0 0.375rem 0.375rem 0; font-size: 0.9rem; margin-bottom: 1rem; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; color: #101622; }
+    h3 { font-size: 1rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #1f2937; padding-bottom: 0.4rem; border-bottom: 1px solid #f3f4f6; }
+    p { color: #4b5563; line-height: 1.7; margin-bottom: 0.75rem; }
+    .method-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 0.25rem; margin-right: 0.5rem; font-family: monospace; }
+    .get { background: #dcfce7; color: #166534; }
+    .put { background: #fef9c3; color: #854d0e; }
+  </style>
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="../../index.html" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="../../index.html" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="../architecture.html" class="sidebar-link">시스템 아키텍처</a>
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="notification-home.html" class="sidebar-link active">알림 &amp; 홈</a>
+        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="../philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">API 레퍼런스</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">알림 &amp; 홈</h1>
+        <p class="text-gray-400 text-sm mb-10">알림: 인증 필요 / 홈 날씨 팁: 공개 경로</p>
+
+        <h2>알림</h2>
+
+        <h3><span class="method-badge get">GET</span>/api/notifications</h3>
+        <p>알림 목록 조회 (페이지네이션). 응답 타입: <code>PageResponse&lt;NotificationResponse&gt;</code></p>
+        <pre><code class="language-bash">GET /api/notifications?page=0&size=20</code></pre>
+        <pre><code class="language-json">// Response data
+{
+  "content": [
+    {
+      "id": 1,
+      "type": "ROUTINE_CONFLICT",
+      "title": "루틴 충돌 감지",
+      "body": "AM 루틴의 레티놀과 비타민 C 성분이 충돌합니다.",
+      "isRead": false,
+      "createdAt": "2026-06-11T10:00:00"
+    }
+  ],
+  "totalElements": 5,
+  "totalPages": 1,
+  "number": 0,
+  "size": 20
+}</code></pre>
+
+        <h3>알림 타입 4종</h3>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-2.5 font-semibold text-gray-700">type</th>
+                <th class="text-left px-4 py-2.5 font-semibold text-gray-700">발생 시점</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600 text-sm">
+              <tr><td class="px-4 py-2.5 font-mono">INGREDIENT_ANALYSIS</td><td class="px-4 py-2.5">AI 성분 분석 완료 시</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono">INGREDIENT_RECOMMENDATION</td><td class="px-4 py-2.5">AI 성분 추천 완료 시</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono">ROUTINE_CONFLICT</td><td class="px-4 py-2.5">루틴 분석 결과 conflict 시</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono">ROUTINE_CAUTION</td><td class="px-4 py-2.5">루틴 분석 결과 caution 시</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3><span class="method-badge get">GET</span>/api/notifications/unread-count</h3>
+        <p>미읽음 알림 수 조회.</p>
+        <pre><code class="language-json">// Response: ApiResponse&lt;Long&gt;
+// unwrap 후 r.data가 숫자 직접값
+{ "success": true, "data": 3, "message": null }</code></pre>
+        <div class="warn-box">
+          <strong>⚠ r.data가 숫자 직접값</strong> — unwrap 후 <code>r.data</code>가 바로 <code>3</code>입니다. <code>r.data.count</code>로 접근하면 <code>undefined</code>가 됩니다.
+        </div>
+
+        <h3><span class="method-badge put">PUT</span>/api/notifications/:id/read</h3>
+        <p>알림 단건 읽음 처리.</p>
+
+        <h3><span class="method-badge put">PUT</span>/api/notifications/read-all</h3>
+        <p>모든 알림 읽음 처리.</p>
+
+        <h2>홈 날씨 팁</h2>
+        <div class="note-box">
+          공개 경로 — 인증 불필요. 동일 좌표 요청은 서버에서 1시간 캐시 (<code>@Cacheable</code>).
+        </div>
+
+        <h3><span class="method-badge get">GET</span>/api/home/weather-tip</h3>
+        <p>현재 날씨 기반 피부 케어 팁. 기본값은 서울 좌표.</p>
+        <pre><code class="language-bash">GET /api/home/weather-tip?lat=37.5665&lon=126.9780</code></pre>
+        <pre><code class="language-json">// Response data
+{
+  "weather": "맑음",
+  "temperature": 24.5,
+  "humidity": 55,
+  "tip": "자외선 지수가 높습니다. SPF 50+ 자외선 차단제를 꼭 바르세요.",
+  "skinCareAdvice": ["자외선 차단제 재도포 2~3시간마다", "보습 미스트 휴대 권장"]
+}</code></pre>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
