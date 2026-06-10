@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>인증 &amp; 보안 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="overview.html" class="sidebar-link">개요</a>
+        <a href="frontend.html" class="sidebar-link">프론트엔드</a>
+        <a href="backend.html" class="sidebar-link">백엔드</a>
+        <a href="database.html" class="sidebar-link">DB 스키마</a>
+        <a href="ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="auth-security.html" class="sidebar-link active">인증 &amp; 보안</a>
+        <a href="deployment.html" class="sidebar-link">배포</a>
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="../api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="../api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="../api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="../philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">인증 &amp; 보안</h1>
+        <p class="text-gray-400 text-sm mb-10">JWT 발급·갱신·폐기 시퀀스, 토큰 저장 전략, SecurityConfig 필터 체인.</p>
+
+        <h2 class="mt-0">JWT 전체 시퀀스</h2>
+        <pre><code class="language-text">[1] 로그인
+  사용자 → POST /api/auth/login (email, password)
+    └─► Spring Boot: 인증 성공 → JWT 발급
+          AccessToken (30분) + RefreshToken (14일) 반환
+          RefreshToken은 DB(refresh_tokens 테이블)에도 저장
+
+[2] 인증된 요청
+  사용자 → GET /api/diary (+ Authorization: Bearer &lt;AccessToken&gt;)
+    └─► JwtAuthenticationFilter: 토큰 검증
+          ├─► 유효 → SecurityContext 설정 → 컨트롤러 진행
+          └─► 유효하지 않음 → 401 반환
+
+[3] 토큰 갱신
+  프론트 axios 인터셉터: 401 수신
+    └─► POST /api/auth/refresh (+ RefreshToken)
+          ├─► DB 검증: 유효하고 폐기되지 않은 RefreshToken인지 확인
+          │     └─► 성공: 기존 RefreshToken 폐기 (is_revoked=true)
+          │                새 AccessToken + 새 RefreshToken 발급·저장
+          │                원본 요청 재시도
+          └─► 실패: logout() → /login 리다이렉트
+
+[4] 로그아웃
+  사용자 → POST /api/auth/logout
+    └─► DB: RefreshToken 폐기 (is_revoked=true)
+          Zustand 스토어 클리어 → /login 리다이렉트</code></pre>
+
+        <h2>토큰 스펙</h2>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3">알고리즘</td>
+                <td class="px-4 py-3">HMAC-SHA (jjwt 0.12.6)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Access Token 수명</td>
+                <td class="px-4 py-3">30분</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Refresh Token 수명</td>
+                <td class="px-4 py-3">14일</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Subject 클레임</td>
+                <td class="px-4 py-3">userId</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">추가 클레임</td>
+                <td class="px-4 py-3">email</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">프론트 저장</td>
+                <td class="px-4 py-3">Zustand localStorage (<code>chapchap-auth</code>)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">DB 저장</td>
+                <td class="px-4 py-3"><code>refresh_tokens</code> 테이블 (<code>is_revoked</code> 플래그)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Refresh Token 로테이션</h2>
+        <p>토큰 갱신 시 기존 Refresh Token을 즉시 폐기하고 새 토큰을 발급한다 (로테이션). 탈취된 Refresh Token으로 재사용하는 공격을 방지한다.</p>
+        <pre><code class="language-text">기존 RefreshToken → is_revoked = true (폐기)
+새 AccessToken + 새 RefreshToken 발급
+  └─► DB에 새 RefreshToken 저장
+  └─► 프론트 Zustand 스토어 업데이트</code></pre>
+
+        <h2>SecurityConfig 필터 체인</h2>
+        <p><code>JwtAuthenticationFilter</code>가 <code>UsernamePasswordAuthenticationFilter</code> 앞에 등록되어 모든 요청을 먼저 처리한다.</p>
+        <pre><code class="language-text">HTTP 요청 진입
+  └─► JwtAuthenticationFilter (Spring Security 필터 체인)
+        ├─► 공개 경로? → 통과 (SecurityContext 설정 없음)
+        └─► 보호 경로?
+              ├─► Authorization 헤더에서 Bearer 토큰 추출
+              ├─► 서명 검증 + 만료 확인
+              │     ├─► 유효 → SecurityContext 설정 → 컨트롤러 진행
+              │     └─► 무효/만료 → 401 응답 (필터에서 직접)
+              └─► 헤더 없음 → 401 응답</code></pre>
+
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">경로</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">접근</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">이유</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3"><code>/api/auth/**</code></td>
+                <td class="px-4 py-3">공개</td>
+                <td class="px-4 py-3">인증 전 접근 필요 (로그인·회원가입·토큰갱신)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>/api/products/**</code></td>
+                <td class="px-4 py-3">공개</td>
+                <td class="px-4 py-3">로그인 없이 제품 탐색 허용</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>/api/ingredients/**</code></td>
+                <td class="px-4 py-3">공개</td>
+                <td class="px-4 py-3">로그인 없이 성분 조회 허용</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>/api/home/**</code></td>
+                <td class="px-4 py-3">공개</td>
+                <td class="px-4 py-3">날씨 팁 (공개 콘텐츠)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">나머지 전체</td>
+                <td class="px-4 py-3">JWT 필요</td>
+                <td class="px-4 py-3">사용자별 개인 데이터 접근</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          미인증 요청에는 <strong>403이 아닌 401</strong>을 반환한다.
+          <code>authenticationEntryPoint</code>가 명시적으로 401을 응답하도록 설정되어 있다.
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
