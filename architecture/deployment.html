@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>배포 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="overview.html" class="sidebar-link">개요</a>
+        <a href="frontend.html" class="sidebar-link">프론트엔드</a>
+        <a href="backend.html" class="sidebar-link">백엔드</a>
+        <a href="database.html" class="sidebar-link">DB 스키마</a>
+        <a href="ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="auth-security.html" class="sidebar-link">인증 &amp; 보안</a>
+        <a href="deployment.html" class="sidebar-link active">배포</a>
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="../api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="../api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="../api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="../philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">배포</h1>
+        <p class="text-gray-400 text-sm mb-10">Docker Compose 서비스 구성, 시작 명령어, 포트 맵, 환경 변수.</p>
+
+        <h2 class="mt-0">Docker Compose 서비스 구성</h2>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">서비스</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">이미지/빌드</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">포트</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">프로파일</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3"><code>db</code></td>
+                <td class="px-4 py-3"><code>postgres:16</code></td>
+                <td class="px-4 py-3">5432</td>
+                <td class="px-4 py-3">(항상)</td>
+                <td class="px-4 py-3">PostgreSQL 16 데이터베이스</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>api</code></td>
+                <td class="px-4 py-3"><code>build: .</code></td>
+                <td class="px-4 py-3">8080</td>
+                <td class="px-4 py-3"><code>full</code></td>
+                <td class="px-4 py-3">Spring Boot 애플리케이션</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>ai</code></td>
+                <td class="px-4 py-3"><code>build: ./chapchap-ai</code></td>
+                <td class="px-4 py-3">8000</td>
+                <td class="px-4 py-3"><code>full</code></td>
+                <td class="px-4 py-3">Python FastAPI AI 서비스</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          <code>--profile full</code> 없이 <code>docker-compose up</code>을 실행하면 <code>db</code>만 기동된다.
+          <code>api</code>·<code>ai</code>는 <code>full</code> 프로파일에만 포함된다.
+        </div>
+
+        <h2>시작 명령어</h2>
+        <pre><code class="language-powershell"># 개발 (DB만)
+cd CHAPCHAP-Backend
+docker-compose up db -d
+
+# Spring Boot 로컬 실행
+.\gradlew.bat bootRun
+
+# 전체 스택 (AI 포함)
+.\gradlew.bat bootJar                              # 먼저 JAR 빌드
+docker-compose --profile full up --build -d        # 전체 기동
+
+# 프론트엔드
+cd CHAPCHAP-Frontend
+npm run dev    # http://localhost:5173 → /api/* 를 :8080으로 프록시</code></pre>
+
+        <h2>서비스 기동 순서</h2>
+        <pre><code class="language-text">1. .\gradlew.bat bootJar     — 실행 가능한 JAR 생성
+2. docker-compose --profile full up --build -d
+   ├─► db 서비스 기동 (PostgreSQL)
+   ├─► api 서비스 빌드·기동 (JAR 복사, JRE 이미지)
+   └─► ai 서비스 빌드·기동 (Python 이미지)</code></pre>
+
+        <div class="warn-box">
+          <code>bootJar</code> 없이 <code>docker-compose --profile full up --build</code>를 실행하면
+          <code>api</code> 컨테이너가 오래된 JAR로 빌드된다. 항상 <strong>bootJar 먼저</strong>.
+        </div>
+
+        <h2>포트 맵</h2>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">서비스</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">컨테이너 포트</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">호스트 포트</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3">PostgreSQL</td>
+                <td class="px-4 py-3">5432</td>
+                <td class="px-4 py-3">5432</td>
+                <td class="px-4 py-3">DB 직접 접속 (개발용)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Spring Boot</td>
+                <td class="px-4 py-3">8080</td>
+                <td class="px-4 py-3">8080</td>
+                <td class="px-4 py-3">REST API</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Python AI</td>
+                <td class="px-4 py-3">8000</td>
+                <td class="px-4 py-3">8000</td>
+                <td class="px-4 py-3">FastAPI AI 서비스</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Vite Dev</td>
+                <td class="px-4 py-3">5173</td>
+                <td class="px-4 py-3">5173</td>
+                <td class="px-4 py-3">프론트엔드 개발 서버 (컨테이너 아님)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>환경 변수</h2>
+        <p><code>.env</code> 파일에 정의 (gitignore됨). <code>docker-compose.yml</code>이 자동으로 로드한다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">변수</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">대상 서비스</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3"><code>JWT_SECRET</code></td>
+                <td class="px-4 py-3">Spring Boot (api)</td>
+                <td class="px-4 py-3">JWT 서명 키 (32자 이상)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>OPENAI_API_KEY</code></td>
+                <td class="px-4 py-3">Python AI (ai)</td>
+                <td class="px-4 py-3">OpenAI API 키</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>OPENWEATHERMAP_API_KEY</code></td>
+                <td class="px-4 py-3">Spring Boot (api)</td>
+                <td class="px-4 py-3">OpenWeatherMap API 키</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          <code>.env</code> 파일은 절대 커밋하지 않는다. <code>.gitignore</code>에 등록되어 있으며,
+          새 환경 설정 시 직접 생성해야 한다.
+        </div>
+
+        <h2>서비스 간 통신</h2>
+        <pre><code class="language-text">Vite Dev Server (:5173)
+  └─► /api/* 프록시 → Spring Boot (:8080)
+        ├─► PostgreSQL (:5432) — JDBC
+        └─► Python AI (:8000) — HTTP (WebClient)
+              └─► OpenAI API — HTTPS</code></pre>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
