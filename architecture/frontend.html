@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>프론트엔드 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="overview.html" class="sidebar-link">개요</a>
+        <a href="frontend.html" class="sidebar-link active">프론트엔드</a>
+        <a href="backend.html" class="sidebar-link">백엔드</a>
+        <a href="database.html" class="sidebar-link">DB 스키마</a>
+        <a href="ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="auth-security.html" class="sidebar-link">인증 &amp; 보안</a>
+        <a href="deployment.html" class="sidebar-link">배포</a>
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="../api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="../api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="../api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="../philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">프론트엔드</h1>
+        <p class="text-gray-400 text-sm mb-10">React SPA 구조, 라우팅, 상태 관리, API 레이어.</p>
+
+        <h2 class="mt-0">디렉토리 구조</h2>
+        <pre><code class="language-text">src/
+├── api/             # 도메인별 API 모듈 (auth, home, ingredient, routine, profile, products, notifications)
+├── components/      # 공유 컴포넌트 (SubpageHeader, layout/AppLayout, routine/ProductPickerSheet 등)
+├── hooks/           # TanStack Query 훅 (도메인별)
+├── pages/           # 라우트 컴포넌트
+├── store/           # Zustand 스토어 (authStore, analysisStore)
+├── types/           # index.ts — 공유 타입
+├── App.tsx          # 라우트 정의 (23개)
+└── main.tsx         # QueryClient 설정</code></pre>
+
+        <h2>라우팅</h2>
+        <p>23개 라우트 모두 <code>src/App.tsx</code>에 정의. 보호 라우트는 <code>&lt;AppLayout /&gt;</code>의 자식으로 배치되며, <code>AppLayout</code>이 <code>useAuthStore</code>에서 <code>isAuthenticated</code>를 읽어 미인증 시 <code>/login</code>으로 리다이렉트한다.</p>
+
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">경로</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">인증</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3"><code>/</code></td><td class="px-4 py-3">홈 (리다이렉트)</td><td class="px-4 py-3">-</td></tr>
+              <tr><td class="px-4 py-3"><code>/home</code></td><td class="px-4 py-3">홈 피드</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/login</code></td><td class="px-4 py-3">로그인</td><td class="px-4 py-3">-</td></tr>
+              <tr><td class="px-4 py-3"><code>/register</code></td><td class="px-4 py-3">회원가입</td><td class="px-4 py-3">-</td></tr>
+              <tr><td class="px-4 py-3"><code>/products</code></td><td class="px-4 py-3">제품 검색</td><td class="px-4 py-3">-</td></tr>
+              <tr><td class="px-4 py-3"><code>/ingredient/:productId</code></td><td class="px-4 py-3">제품 성분 상세</td><td class="px-4 py-3">-</td></tr>
+              <tr><td class="px-4 py-3"><code>/ingredient/ai-loading</code></td><td class="px-4 py-3">AI 성분 분석 로딩</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/ingredient/ai-result</code></td><td class="px-4 py-3">AI 성분 분석 결과</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/routine</code></td><td class="px-4 py-3">루틴 관리</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/routine/ai-loading</code></td><td class="px-4 py-3">AI 루틴 진단 로딩</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/routine/ai-result</code></td><td class="px-4 py-3">AI 루틴 진단 결과</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/diary</code></td><td class="px-4 py-3">피부 일기</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/diary/:id</code></td><td class="px-4 py-3">일기 상세</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/diary/new</code></td><td class="px-4 py-3">일기 작성</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/diary/:id/edit</code></td><td class="px-4 py-3">일기 수정</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/wishlist</code></td><td class="px-4 py-3">찜 목록</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/feedback</code></td><td class="px-4 py-3">피드백 내역</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/notifications</code></td><td class="px-4 py-3">알림 목록</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/profile</code></td><td class="px-4 py-3">내 프로필</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/profile/edit</code></td><td class="px-4 py-3">프로필 수정</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/profile/skin</code></td><td class="px-4 py-3">피부 타입 설정</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/profile/preferences</code></td><td class="px-4 py-3">성분 선호 설정</td><td class="px-4 py-3">필요</td></tr>
+              <tr><td class="px-4 py-3"><code>/profile/notification-settings</code></td><td class="px-4 py-3">알림 설정</td><td class="px-4 py-3">필요</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>상태 관리 (Zustand)</h2>
+
+        <h3>useAuthStore</h3>
+        <p>JWT 토큰과 사용자 정보를 관리하는 전역 스토어. <code>localStorage</code>에 영속되어 새로고침 후에도 로그인 상태가 유지된다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">파일</td><td class="px-4 py-3"><code>src/store/authStore.ts</code></td></tr>
+              <tr><td class="px-4 py-3">영속</td><td class="px-4 py-3">localStorage (<code>chapchap-auth</code>)</td></tr>
+              <tr><td class="px-4 py-3">필드</td><td class="px-4 py-3"><code>accessToken</code>, <code>refreshToken</code>, <code>user</code>, <code>isAuthenticated</code></td></tr>
+              <tr><td class="px-4 py-3">액션</td><td class="px-4 py-3"><code>login()</code>, <code>setTokens()</code>, <code>logout()</code>, <code>updateUser()</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>useAnalysisStore</h3>
+        <p>AI 분석 2단계 플로우(로딩 페이지 → 결과 페이지) 브릿지 역할을 하는 스토어. 로딩 페이지가 API 호출 후 결과를 저장하면 결과 페이지가 읽어간다. 결과 소비 후 스토어를 클리어해야 한다. 인메모리 전용이므로 새로고침 시 결과가 소멸된다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">파일</td><td class="px-4 py-3"><code>src/store/analysisStore.ts</code></td></tr>
+              <tr><td class="px-4 py-3">영속</td><td class="px-4 py-3">인메모리 (새로고침 시 소멸)</td></tr>
+              <tr><td class="px-4 py-3">필드</td><td class="px-4 py-3"><code>routineResult: RoutineAnalysisResult | null</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>API 레이어</h2>
+        <p>모든 HTTP 요청은 <code>src/api/client.ts</code>의 단일 Axios 인스턴스를 통해 처리된다. 도메인별 모듈(<code>auth.ts</code>, <code>home.ts</code>, <code>ingredient.ts</code>, <code>routine.ts</code>, <code>profile.ts</code>, <code>products.ts</code>, <code>notifications.ts</code>)이 실제 API 함수를 정의한다.</p>
+
+        <h3>Request 인터셉터</h3>
+        <p>모든 요청에 <code>Authorization: Bearer &lt;accessToken&gt;</code> 헤더를 자동 첨부한다. <code>useAuthStore</code>에서 토큰을 읽어 주입하므로 각 API 함수에서 별도 처리가 필요 없다.</p>
+
+        <h3>Response 인터셉터: unwrapApiResponse</h3>
+        <p>모든 백엔드 응답의 <code>{ success, data, message }</code> 래퍼를 자동으로 벗겨낸다. 훅에서 <code>r.data</code>는 이미 실제 페이로드이므로 추가로 <code>.data</code>를 한 번 더 접근하면 <code>undefined</code>가 된다.</p>
+
+        <h3>Response 인터셉터: 401 자동 처리</h3>
+        <p>액세스 토큰 만료 시 자동으로 갱신을 시도하고 원본 요청을 재시도한다. 복수 요청이 동시에 401을 수신해도 갱신 요청은 한 번만 발생한다.</p>
+        <pre><code class="language-text">401 수신
+  └─► isRefreshing 플래그 확인
+        ├─► 이미 갱신 중: failedQueue에 원본 요청 추가
+        └─► 갱신 시작: POST /api/auth/refresh
+              ├─► 성공: 새 토큰 저장 → failedQueue 모든 요청 재시도
+              └─► 실패: logout() → /login 리다이렉트</code></pre>
+
+        <h3>TanStack Query 설정</h3>
+        <p>서버 데이터 패칭·캐싱은 TanStack Query v5로 관리한다. 훅은 <code>src/hooks/</code>에 도메인별로 분리되며, 페이지 컴포넌트는 훅을 통해서만 API 함수를 사용한다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">설정</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3"><code>staleTime</code></td><td class="px-4 py-3">5분 (1000 × 60 × 5)</td></tr>
+              <tr><td class="px-4 py-3"><code>retry</code></td><td class="px-4 py-3">1</td></tr>
+              <tr><td class="px-4 py-3">설정 위치</td><td class="px-4 py-3"><code>src/main.tsx</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>주요 타입 대응표</h2>
+        <p>모든 공유 타입은 <code>src/types/index.ts</code> 한 파일에서 관리. 백엔드 DTO와 1:1 대응한다.</p>
+
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">프론트 타입</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">백엔드 DTO</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">주요 필드</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3"><code>DiaryEntry</code></td><td class="px-4 py-3"><code>DiaryResponse</code></td><td class="px-4 py-3"><code>logDate</code>, <code>skinStatus</code>, <code>memo</code></td></tr>
+              <tr><td class="px-4 py-3"><code>IngredientItem</code></td><td class="px-4 py-3"><code>ProductIngredientResponse</code></td><td class="px-4 py-3"><code>inciName</code>, <code>koName</code>, <code>functionTags</code>, <code>concentrationOrder</code></td></tr>
+              <tr><td class="px-4 py-3"><code>RoutineItem</code></td><td class="px-4 py-3"><code>RoutineProductItem</code></td><td class="px-4 py-3"><code>stepOrder</code>, <code>productName</code>, <code>brand</code>, <code>imageUrl</code></td></tr>
+              <tr><td class="px-4 py-3"><code>RoutineRecord</code></td><td class="px-4 py-3"><code>RoutineResponse</code></td><td class="px-4 py-3"><code>GET /api/routine?period=AM|PM</code>, 루틴 없으면 404→null</td></tr>
+              <tr><td class="px-4 py-3"><code>AiIngredientResult</code> 내 성분</td><td class="px-4 py-3"><code>IngredientAnalysis</code></td><td class="px-4 py-3"><code>inciName</code>, <code>koName</code>, <code>assessment</code>, <code>reason</code></td></tr>
+              <tr><td class="px-4 py-3"><code>FeedbackRecord</code></td><td class="px-4 py-3"><code>FeedbackResponse</code></td><td class="px-4 py-3"><code>effective</code> (isEffective 아님)</td></tr>
+              <tr><td class="px-4 py-3"><code>WishlistItem</code></td><td class="px-4 py-3"><code>WishlistItemResponse</code></td><td class="px-4 py-3"><code>productId</code> (단일 id 없음)</td></tr>
+              <tr><td class="px-4 py-3"><code>PageResponse&lt;T&gt;</code></td><td class="px-4 py-3">Spring <code>Page&lt;T&gt;</code></td><td class="px-4 py-3"><code>.content[]</code>, <code>.page.totalElements</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          <strong>주의:</strong> 필드명은 백엔드 DTO 기준이다. 예를 들어 일기의 날짜 필드는 <code>logDate</code>이며 <code>date</code>가 아니다.
+          <code>FeedbackRecord.effective</code>는 boolean으로 <code>isEffective</code>가 아님에 주의.
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
