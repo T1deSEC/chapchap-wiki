@@ -128,20 +128,20 @@
 
         <h2>핵심 설계 원칙</h2>
         <div class="note-box">
-          <strong>ApiResponse 래퍼:</strong> 모든 백엔드 응답은 <code>{ success, data, message }</code> 래퍼로 감싼다.
-          프론트 axios 인터셉터(<code>unwrapApiResponse</code>)가 자동으로 벗겨내므로 훅에서 <code>r.data</code>는 이미 실제 페이로드다.
+          <strong>ApiResponse 래퍼:</strong> 모든 백엔드 응답은 <code>{ success, data, message }</code> 래퍼로 감쌉니다.
+          프론트 axios 인터셉터(<code>unwrapApiResponse</code>)가 자동으로 벗겨내므로 훅에서 <code>r.data</code>는 이미 실제 페이로드입니다.
         </div>
         <div class="note-box">
           <strong>JWT 토큰 수명:</strong> Access Token 30분, Refresh Token 14일.
-          401 수신 시 프론트 인터셉터가 자동으로 갱신을 시도하고 원본 요청을 재시도한다.
+          401 수신 시 프론트 인터셉터가 자동으로 갱신을 시도하고 원본 요청을 재시도합니다.
         </div>
         <div class="note-box">
-          <strong>DB 마이그레이션:</strong> Flyway로 관리. 현재 V15까지 적용됨.
-          다음 마이그레이션은 <strong>V16</strong>부터 작성.
+          <strong>DB 마이그레이션:</strong> Flyway로 관리합니다. 현재 V15까지 적용되었습니다.
+          다음 마이그레이션은 <strong>V16</strong>부터 작성합니다.
         </div>
         <div class="note-box">
-          <strong>TanStack Query:</strong> <code>staleTime: 5분</code>, <code>retry: 1</code> 전역 기본값.
-          페이지네이션 응답의 실제 배열은 <code>.content</code>에 있다.
+          <strong>TanStack Query:</strong> <code>staleTime: 5분</code>, <code>retry: 1</code> 전역 기본값입니다.
+          페이지네이션 응답의 실제 배열은 <code>.content</code>에 있습니다.
         </div>
 
       </div>
