@@ -69,7 +69,7 @@
 
         <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">인증 &amp; 보안</h1>
-        <p class="text-gray-400 text-sm mb-10">JWT 발급·갱신·폐기 시퀀스, 토큰 저장 전략, SecurityConfig 필터 체인.</p>
+        <p class="text-gray-400 text-sm mb-10">JWT 발급·갱신·폐기 시퀀스, 토큰 저장 전략, SecurityConfig 필터 체인, 회원가입 접근 제어.</p>
 
         <h2 class="mt-0">JWT 전체 시퀀스</h2>
         <pre><code class="language-text">[1] 로그인
@@ -201,6 +201,51 @@
         <div class="note-box">
           미인증 요청에는 <strong>403이 아닌 401</strong>을 반환합니다.
           <code>authenticationEntryPoint</code>가 명시적으로 401을 응답하도록 설정되어 있습니다.
+        </div>
+
+        <h2>회원가입 접근 제어</h2>
+        <p>회원가입(<code>POST /api/auth/register</code>)은 공개 경로이지만 두 가지 방어막이 적용됩니다.</p>
+
+        <h3>1. 가입 코드 검증</h3>
+        <p>요청 바디의 <code>registrationToken</code>이 서버 환경변수 <code>REGISTRATION_SECRET</code>과 일치해야 합니다. 환경변수가 비어 있으면 어떤 토큰을 입력해도 항상 거부됩니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">조건</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">응답</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">IP 차단 상태</td><td class="px-4 py-3">429 Too Many Requests</td></tr>
+              <tr><td class="px-4 py-3">토큰 불일치 (또는 REGISTRATION_SECRET 미설정)</td><td class="px-4 py-3">403 Forbidden</td></tr>
+              <tr><td class="px-4 py-3">토큰 일치</td><td class="px-4 py-3">201 + AuthResponse (가입 완료)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2. IP 기반 브루트포스 차단</h3>
+        <p><code>RegistrationAttemptService</code>가 IP별 실패 횟수를 인메모리(<code>ConcurrentHashMap</code>)로 추적합니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">차단 임계값</td><td class="px-4 py-3">동일 IP에서 토큰 불일치 10회</td></tr>
+              <tr><td class="px-4 py-3">차단 지속 시간</td><td class="px-4 py-3">1시간 (만료 후 자동 해제)</td></tr>
+              <tr><td class="px-4 py-3">성공 시</td><td class="px-4 py-3">해당 IP의 시도 횟수 초기화</td></tr>
+              <tr><td class="px-4 py-3">IP 추출 우선순위</td><td class="px-4 py-3"><code>X-Forwarded-For</code> 헤더 → <code>RemoteAddr</code></td></tr>
+              <tr><td class="px-4 py-3">저장소</td><td class="px-4 py-3">인메모리 (서버 재시작 시 초기화)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box">
+          차단 기록은 인메모리이므로 서버 재시작 시 초기화됩니다. 프로덕션에서 장기 운용이 필요하다면 Redis 등 외부 저장소로 교체할 수 있습니다.
         </div>
 
       </div>
