@@ -118,15 +118,38 @@
 
         <!-- Tech stack badges -->
         <h2 class="text-xl font-bold mb-4 text-bg-dark mt-0">기술 스택</h2>
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">프론트엔드</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">React 18</span>
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">TypeScript</span>
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">Vite</span>
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">TailwindCSS</span>
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">TanStack Query v5</span>
+          <span class="bg-blue-50 border border-blue-100 rounded-full px-4 py-1.5 text-sm font-semibold text-blue-700">React Router v6</span>
+        </div>
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">백엔드</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">Spring Boot 3.3.4</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">Spring Security</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">JWT</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">JPA / Hibernate</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">WebClient</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">PostgreSQL 16</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">Flyway</span>
+          <span class="bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-sm font-semibold text-green-700">Docker Compose</span>
+        </div>
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">AI 서비스</p>
         <div class="flex flex-wrap gap-2 mb-10">
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Spring Boot 3.3.4</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">React + TypeScript</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">PostgreSQL 16</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Python LangGraph</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Docker</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Vite + TailwindCSS</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">TanStack Query v5</span>
-          <span class="bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm font-semibold text-gray-700">Flyway</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">Python 3.11</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">FastAPI</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">LangGraph</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">LangChain</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">OpenAI gpt-4o-mini</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">SQLAlchemy</span>
+          <span class="bg-purple-50 border border-purple-100 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700">Pydantic v2</span>
         </div>
 
         <!-- Quick links -->
@@ -138,15 +161,31 @@
           </a>
           <a href="architecture/overview.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
             <div class="font-semibold text-sm group-hover:text-primary">시스템 아키텍처 →</div>
-            <div class="text-gray-500 text-xs mt-1">레이어 다이어그램, DB 스키마, JWT 흐름</div>
+            <div class="text-gray-500 text-xs mt-1">전체 레이어 구조, 서비스 간 통신 흐름</div>
+          </a>
+          <a href="architecture/ai-service.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">AI 서비스 →</div>
+            <div class="text-gray-500 text-xs mt-1">LangGraph StateGraph, Send API 병렬화, 안전도 알고리즘</div>
+          </a>
+          <a href="architecture/pipeline.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">파이프라인 명세 →</div>
+            <div class="text-gray-500 text-xs mt-1">멀티 서비스 시퀀스 다이어그램, 예외 처리 분기</div>
           </a>
           <a href="api/auth-user.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
             <div class="font-semibold text-sm group-hover:text-primary">API 레퍼런스 →</div>
             <div class="text-gray-500 text-xs mt-1">인증·제품·루틴·피드백·추천·알림 엔드포인트</div>
           </a>
+          <a href="api/error-codes.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">에러 코드 →</div>
+            <div class="text-gray-500 text-xs mt-1">전체 ErrorCode 목록, HTTP 상태, 발생 시점</div>
+          </a>
           <a href="philosophy/ingredient-ranking.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
             <div class="font-semibold text-sm group-hover:text-primary">AI 설계 철학 →</div>
             <div class="text-gray-500 text-xs mt-1">match_score 공식, 안전도 점수 계산 원리</div>
+          </a>
+          <a href="troubleshooting.html" class="bg-white border border-gray-100 rounded-xl p-5 hover:border-primary hover:shadow-sm transition-all group">
+            <div class="font-semibold text-sm group-hover:text-primary">트러블슈팅 →</div>
+            <div class="text-gray-500 text-xs mt-1">자주 발생하는 오류와 해결 방법</div>
           </a>
         </div>
 
