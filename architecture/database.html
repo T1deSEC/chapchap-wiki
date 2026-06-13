@@ -100,16 +100,16 @@
                 <td class="px-4 py-3">user_wishlist, product_feedback, notifications, user_ingredient_recommendation, user_recommended_ingredient, user_avoid_ingredient, user_recommended_product, user_product_ai_analysis, user_product_ai_ingredient</td>
               </tr>
               <tr>
-                <td class="px-4 py-3"><code>V4+</code></td>
-                <td class="px-4 py-3"><em class="text-gray-400">예약</em></td>
-                <td class="px-4 py-3">시드 데이터 — 새 데이터 투입 시 여기서부터 추가</td>
+                <td class="px-4 py-3"><code>V4</code></td>
+                <td class="px-4 py-3"><code>V4__real_products.sql</code></td>
+                <td class="px-4 py-3">실제 화장품·성분 시드 데이터 (485KB, products/ingredients/product_ingredients 대량 INSERT)</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="note-box">
-          <strong>정책:</strong> V1~V3은 DDL(스키마) 전용입니다. 시드 데이터(INSERT)는 V4부터 별도 파일로 관리합니다.
+          <strong>정책:</strong> V1~V3은 DDL(스키마) 전용입니다. V4는 실제 제품 시드 데이터. 추가 마이그레이션은 V5부터 작성합니다.
         </div>
 
         <!-- ───────────────────────────────────────────── -->

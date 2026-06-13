@@ -100,7 +100,7 @@
             <tbody class="divide-y divide-gray-50 text-gray-600">
               <tr><td class="px-4 py-3 font-semibold text-gray-700">프론트엔드</td><td class="px-4 py-3">React 18 + TypeScript + Vite, TailwindCSS, TanStack Query v5, Zustand, React Router v6, Axios, Framer Motion</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">백엔드</td><td class="px-4 py-3">Spring Boot 3.3.4, Java 22, Gradle, Spring Security 6, jjwt 0.12.6, Spring Data JPA, Flyway</td></tr>
-              <tr><td class="px-4 py-3 font-semibold text-gray-700">데이터베이스</td><td class="px-4 py-3">PostgreSQL 16, Flyway 마이그레이션 V1–V15</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-gray-700">데이터베이스</td><td class="px-4 py-3">PostgreSQL 16, Flyway 마이그레이션 V1–V4</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">AI 서비스</td><td class="px-4 py-3">Python 3.11, FastAPI, LangGraph, LangChain-OpenAI, gpt-4o-mini</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">인프라 (로컬)</td><td class="px-4 py-3">Docker, Docker Compose (3 services: db / api / ai)</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">인프라 (프로덕션)</td><td class="px-4 py-3">AWS EC2 t2.micro — nginx + Spring Boot + PostgreSQL + Python AI (Docker Compose, 단일 서버)</td></tr>
@@ -120,7 +120,7 @@
           </a>
           <a href="database.html" class="block bg-white border border-gray-100 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
             <div class="text-primary font-semibold mb-1 text-sm">DB 스키마 →</div>
-            <p class="text-xs text-gray-500 leading-relaxed">Flyway V1–V15 마이그레이션 이력, 테이블 컬럼 상세, 외래키 관계</p>
+            <p class="text-xs text-gray-500 leading-relaxed">Flyway V1–V4 마이그레이션 이력, 테이블 컬럼 상세, 외래키 관계</p>
           </a>
           <a href="ai-service.html" class="block bg-white border border-gray-100 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
             <div class="text-primary font-semibold mb-1 text-sm">AI 서비스 →</div>
@@ -146,8 +146,8 @@
           401 수신 시 프론트 인터셉터가 자동으로 갱신을 시도하고 원본 요청을 재시도합니다.
         </div>
         <div class="note-box">
-          <strong>DB 마이그레이션:</strong> Flyway로 관리합니다. 현재 V15까지 적용되었습니다.
-          다음 마이그레이션은 <strong>V16</strong>부터 작성합니다.
+          <strong>DB 마이그레이션:</strong> Flyway로 관리합니다. V1~V3은 스키마 DDL, V4는 실제 화장품 시드 데이터(485KB)입니다.
+          다음 마이그레이션은 <strong>V5</strong>부터 작성합니다.
         </div>
         <div class="note-box">
           <strong>TanStack Query:</strong> <code>staleTime: 5분</code>, <code>retry: 1</code> 전역 기본값입니다.

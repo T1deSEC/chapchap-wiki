@@ -151,20 +151,24 @@
     {
       "inciName": "RETINOL",
       "koName": "레티놀",
-      "assessment": "주의",
-      "reason": "민감성 피부에 자극 가능성. 저농도 사용 권장.",
-      "concentrationOrder": 5
+      "safetyLevel": "주의",
+      "assessment": "민감성 피부에 자극 가능성이 있습니다.",
+      "reason": "레티놀은 세포 교체를 촉진하나 민감성 피부에 자극을 줄 수 있습니다."
     }
   ],
   "summary": "전반적으로 안전하나 레티놀 함량에 주의 필요.",
   "recommendations": ["야간 루틴에만 사용", "주 2~3회부터 시작"],
-  "skinImpacts": {
-    "보습": 85,
-    "항노화·재생": 78,
-    "피부 장벽": 60,
-    "진정·항염": 40
-  }
+  "skinImpacts": [
+    { "label": "보습", "score": 85, "level": "높음", "color": "primary" },
+    { "label": "항노화·재생", "score": 78, "level": "높음", "color": "primary" },
+    { "label": "피부 장벽", "score": 60, "level": "높음", "color": "primary" },
+    { "label": "진정·항염", "score": 40, "level": "중간", "color": "warning" }
+  ]
 }</code></pre>
+        <div class="note-box">
+          <code>skinImpacts</code>는 객체(map)가 아닌 <strong>배열</strong>입니다. 각 항목은 <code>{ label, score, level, color }</code> 구조입니다.<br/>
+          <code>ingredientAnalysis</code>의 <code>safetyLevel</code>은 AI가 반환하는 한국어 레벨 문자열 (<code>"안전"</code> / <code>"주의"</code> / <code>"위험"</code>)입니다.
+        </div>
 
         <h3>safetyScore 기준</h3>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">

@@ -84,8 +84,8 @@
       "type": "ROUTINE_CONFLICT",
       "title": "루틴 충돌 감지",
       "body": "AM 루틴의 레티놀과 비타민 C 성분이 충돌합니다.",
-      "isRead": false,
-      "createdAt": "2026-06-11T10:00:00"
+      "read": false,
+      "createdAt": "2026-06-11T10:00:00+09:00"
     }
   ],
   "totalElements": 5,
@@ -133,16 +133,15 @@
         </div>
 
         <h3><span class="method-badge get">GET</span>/api/home/weather-tip</h3>
-        <p>현재 날씨 기반 피부 케어 팁. 기본값은 서울 좌표.</p>
+        <p>현재 날씨 기반 피부 케어 팁 문자열. 기본값은 서울 좌표.</p>
         <pre><code class="language-bash">GET /api/home/weather-tip?lat=37.5665&lon=126.9780</code></pre>
         <pre><code class="language-json">// Response data
 {
-  "weather": "맑음",
-  "temperature": 24.5,
-  "humidity": 55,
-  "tip": "자외선 지수가 높습니다. SPF 50+ 자외선 차단제를 꼭 바르세요.",
-  "skinCareAdvice": ["자외선 차단제 재도포 2~3시간마다", "보습 미스트 휴대 권장"]
+  "message": "자외선 지수가 높습니다. SPF 50+ 자외선 차단제를 꼭 바르세요."
 }</code></pre>
+        <div class="note-box">
+          OpenWeatherMap API에서 날씨 코드(<code>weather[0].id</code>)를 조회해 프리셋 한국어 피부 팁 문자열을 반환합니다. 날씨 수치(온도·습도)는 포함되지 않습니다.
+        </div>
 
       </div>
     </main>

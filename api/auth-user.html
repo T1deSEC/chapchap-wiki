@@ -80,14 +80,18 @@
         <h2>인증</h2>
 
         <h3><span class="method-badge post">POST</span>/api/auth/register</h3>
-        <p>회원가입. 이메일 중복 시 409 반환.</p>
+        <p>회원가입. 이메일 중복 시 409. IP당 토큰 불일치 10회 누적 시 1시간 차단(429).</p>
         <pre><code class="language-json">// Request body
 {
   "name": "홍길동",
   "email": "user@example.com",
   "password": "securePassword123!",
-  "skinType": "DRY"
+  "skinType": "DRY",
+  "registrationToken": "&lt;REGISTRATION_SECRET 값&gt;"
 }</code></pre>
+        <div class="warn-box">
+          <strong>⚠ registrationToken 필수</strong> — 서버 환경변수 <code>REGISTRATION_SECRET</code>과 일치해야 합니다. 비밀번호는 최소 8자.
+        </div>
         <pre><code class="language-json">// Response data
 {
   "accessToken": "eyJhbGci...",
@@ -159,17 +163,16 @@
         <pre><code class="language-json">{ "currentPassword": "old123!", "newPassword": "new456!" }</code></pre>
 
         <h3><span class="method-badge get">GET</span> / <span class="method-badge put">PUT</span>/api/users/me/notification-settings</h3>
-        <p>알림 카테고리별 ON/OFF 조회·수정.</p>
+        <p>알림 카테고리별 ON/OFF 조회·수정. 3개 카테고리 (루틴 conflict/caution은 단일 <code>routineAnalysisEnabled</code> 항목).</p>
         <pre><code class="language-json">// GET Response data
 {
-  "ingredientAnalysis": true,
-  "ingredientRecommendation": true,
-  "routineConflict": true,
-  "routineCaution": false
+  "ingredientAnalysisEnabled": true,
+  "ingredientRecommendEnabled": true,
+  "routineAnalysisEnabled": true
 }
 
 // PUT Request body — 변경할 항목만 포함
-{ "routineConflict": false }</code></pre>
+{ "routineAnalysisEnabled": false }</code></pre>
 
       </div>
     </main>

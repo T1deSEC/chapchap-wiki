@@ -112,10 +112,10 @@
   "imageUrl": "https://...",
   "ingredients": [
     {
+      "ingredientId": 42,
       "inciName": "RETINOL",
       "koName": "레티놀",
-      "concentrationOrder": 5,
-      "functionTags": []
+      "concentrationOrder": 5
     }
   ]
 }</code></pre>
@@ -148,7 +148,7 @@
   "description": "비타민 A 유도체. 세포 재생 및 항노화 효과."
 }</code></pre>
         <div class="warn-box">
-          <strong>⚠ safety_level, function_tags 없음</strong> — V11·V12 마이그레이션에서 삭제되었습니다. 성분 안전도는 AI 분석(<code>POST /api/analysis/ingredient</code>) 결과로만 제공됩니다.
+          <strong>⚠ safety_level, function_tags 없음</strong> — <code>ingredients</code> 테이블에 해당 컬럼이 존재하지 않습니다. 성분 안전도는 AI 분석(<code>POST /api/analysis/ingredient</code>) 결과로만 제공됩니다.
         </div>
 
         <h2>concentration_order 의미</h2>

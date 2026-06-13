@@ -128,12 +128,16 @@
         <pre><code class="language-json">// Response data (array)
 [
   {
-    "logId": 1,
+    "id": 1,
     "logDate": "2026-06-10",
     "skinStatus": "GOOD",
     "keywords": ["보습", "트러블없음"],
     "memo": "오늘 피부 컨디션 최고",
-    "photoUrl": null
+    "photoUrl": null,
+    "amRoutineId": 10,
+    "pmRoutineId": null,
+    "amExecuted": true,
+    "pmExecuted": false
   }
 ]</code></pre>
         <div class="warn-box">
@@ -151,13 +155,13 @@
   "photoUrl": null
 }</code></pre>
 
-        <h3><span class="method-badge get">GET</span>/api/diary/:logId</h3>
+        <h3><span class="method-badge get">GET</span>/api/diary/:id</h3>
         <p>일기 단건 조회.</p>
 
-        <h3><span class="method-badge put">PUT</span>/api/diary/:logId</h3>
+        <h3><span class="method-badge put">PUT</span>/api/diary/:id</h3>
         <p>일기 수정. Request body는 POST와 동일.</p>
 
-        <h3><span class="method-badge delete">DELETE</span>/api/diary/:logId</h3>
+        <h3><span class="method-badge delete">DELETE</span>/api/diary/:id</h3>
         <p>일기 삭제.</p>
 
       </div>
