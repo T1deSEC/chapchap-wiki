@@ -71,7 +71,7 @@
         <p class="text-gray-400 text-sm mb-10">CHAPCHAP 시스템의 전체 구조, 기술 스택, 핵심 설계 원칙.</p>
 
         <h2 class="mt-0">전체 레이어 다이어그램</h2>
-        <p class="text-xs text-gray-400 -mt-6 mb-3">로컬 개발</p>
+        <h3>로컬 개발</h3>
         <pre><code class="language-text">Browser (React + Vite)
   └─► Vite Dev Server (:5173)
         └─► /api/* 프록시
@@ -79,7 +79,7 @@
                     ├─► PostgreSQL (:5432)
                     └─► Python AI Service (:8000)
                               └─► OpenAI API (gpt-4o-mini)</code></pre>
-        <p class="text-xs text-gray-400 mb-3">프로덕션</p>
+        <h3>프로덕션</h3>
         <pre><code class="language-text">Browser
   ├─► Vercel (정적 빌드, HTTPS)  ← VITE_API_BASE_URL=http://EC2:8080
   └─► AWS EC2 t2.micro
