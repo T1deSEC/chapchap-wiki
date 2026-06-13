@@ -71,6 +71,7 @@
         <p class="text-gray-400 text-sm mb-10">CHAPCHAP 시스템의 전체 구조, 기술 스택, 핵심 설계 원칙.</p>
 
         <h2 class="mt-0">전체 레이어 다이어그램</h2>
+        <p class="text-xs text-gray-400 -mt-6 mb-3">로컬 개발</p>
         <pre><code class="language-text">Browser (React + Vite)
   └─► Vite Dev Server (:5173)
         └─► /api/* 프록시
@@ -78,6 +79,14 @@
                     ├─► PostgreSQL (:5432)
                     └─► Python AI Service (:8000)
                               └─► OpenAI API (gpt-4o-mini)</code></pre>
+        <p class="text-xs text-gray-400 mb-3">프로덕션</p>
+        <pre><code class="language-text">Browser
+  ├─► Vercel (정적 빌드, HTTPS)  ← VITE_API_BASE_URL=http://EC2:8080
+  └─► AWS EC2 t2.micro
+        ├─ Spring Boot :8080  (Docker)
+        ├─ PostgreSQL  :5432  (Docker)
+        └─ Python AI   :8000  (Docker)
+              └─► OpenAI API (gpt-4o-mini)</code></pre>
 
         <h2>기술 스택</h2>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
@@ -93,7 +102,8 @@
               <tr><td class="px-4 py-3 font-semibold text-gray-700">백엔드</td><td class="px-4 py-3">Spring Boot 3.3.4, Java 22, Gradle, Spring Security 6, jjwt 0.12.6, Spring Data JPA, Flyway</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">데이터베이스</td><td class="px-4 py-3">PostgreSQL 16, Flyway 마이그레이션 V1–V15</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-gray-700">AI 서비스</td><td class="px-4 py-3">Python 3.11, FastAPI, LangGraph, LangChain-OpenAI, gpt-4o-mini</td></tr>
-              <tr><td class="px-4 py-3 font-semibold text-gray-700">인프라</td><td class="px-4 py-3">Docker, Docker Compose (3 services: db / api / ai)</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-gray-700">인프라 (로컬)</td><td class="px-4 py-3">Docker, Docker Compose (3 services: db / api / ai)</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-gray-700">인프라 (프로덕션)</td><td class="px-4 py-3">AWS EC2 t2.micro (백엔드·DB·AI), Vercel (프론트엔드 정적 호스팅)</td></tr>
             </tbody>
           </table>
         </div>
@@ -122,7 +132,7 @@
           </a>
           <a href="deployment.html" class="block bg-white border border-gray-100 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition-all">
             <div class="text-primary font-semibold mb-1 text-sm">배포 →</div>
-            <p class="text-xs text-gray-500 leading-relaxed">Docker Compose 서비스 구성, 프로파일, 포트 맵, 환경 변수</p>
+            <p class="text-xs text-gray-500 leading-relaxed">로컬 Docker Compose 구성, EC2 + Vercel 프로덕션 배포, 환경 변수 전체 목록</p>
           </a>
         </div>
 

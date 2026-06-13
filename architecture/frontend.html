@@ -227,6 +227,35 @@
           <code>FeedbackRecord.effective</code>는 boolean이며 <code>isEffective</code>가 아닙니다.
         </div>
 
+        <h2>프로덕션 빌드 &amp; 배포 (Vercel)</h2>
+        <p>프로덕션 환경에서는 <code>npm run build</code>로 생성된 정적 파일을 Vercel이 서빙합니다. GitHub 레포와 연동 시 <code>main</code> 브랜치에 push할 때마다 자동 재배포됩니다.</p>
+
+        <h3>API Base URL 설정</h3>
+        <p><code>src/api/client.ts</code>의 Axios 인스턴스는 <code>VITE_API_BASE_URL</code> 환경변수를 baseURL로 사용합니다. 값이 없으면 빈 문자열(<code>''</code>)이 적용되어 same-origin 상대 경로로 요청합니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">환경</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">VITE_API_BASE_URL</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">요청 경로</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">로컬 개발</td><td class="px-4 py-3">설정 안 함 (빈값)</td><td class="px-4 py-3">Vite 프록시가 <code>/api/*</code> → <code>:8080</code> 전달</td></tr>
+              <tr><td class="px-4 py-3">Vercel (프로덕션)</td><td class="px-4 py-3"><code>http://&lt;EC2_IP&gt;:8080</code></td><td class="px-4 py-3">EC2 Spring Boot로 직접 요청</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="warn-box">
+          Vite 프록시(<code>vite.config.ts</code>의 <code>server.proxy</code>)는 개발 서버에서만 동작합니다.
+          빌드된 정적 파일에는 프록시가 없으므로 <code>VITE_API_BASE_URL</code>을 반드시 Vercel 환경변수로 설정해야 합니다.
+        </div>
+
+        <h3>개발 전용 기능</h3>
+        <p>로그인 페이지(<code>/login</code>)에 <strong>[개발용] 백엔드 없이 로그인</strong> 버튼이 있습니다. <code>import.meta.env.DEV === true</code>일 때만 렌더링되며, API 호출 없이 <code>useAuthStore</code>에 mock 상태를 주입합니다. Vercel 빌드(<code>NODE_ENV=production</code>)에서는 표시되지 않습니다.</p>
+
       </div>
     </main>
   </div>
