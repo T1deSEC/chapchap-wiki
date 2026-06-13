@@ -69,9 +69,12 @@
 
         <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">배포</h1>
-        <p class="text-gray-400 text-sm mb-10">Docker Compose 서비스 구성, 시작 명령어, 포트 맵, 환경 변수.</p>
+        <p class="text-gray-400 text-sm mb-10">로컬 개발 환경 및 EC2 + Vercel 프로덕션 배포 가이드.</p>
 
-        <h2 class="mt-0">Docker Compose 서비스 구성</h2>
+        <!-- ───────────────────────────── 로컬 개발 ───────────────────────────── -->
+        <h2 class="mt-0">로컬 개발 환경</h2>
+
+        <h3>Docker Compose 서비스 구성</h3>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
@@ -110,120 +113,215 @@
         </div>
 
         <div class="note-box">
-          <code>--profile full</code> 없이 <code>docker-compose up</code>을 실행하면 <code>db</code>만 기동됩니다.
+          <code>--profile full</code> 없이 실행하면 <code>db</code>만 기동됩니다.
           <code>api</code>·<code>ai</code>는 <code>full</code> 프로파일에만 포함됩니다.
         </div>
 
-        <h2>시작 명령어</h2>
-        <pre><code class="language-powershell"># 개발 (DB만)
+        <h3>시작 명령어</h3>
+        <pre><code class="language-powershell"># DB만 기동 (일반 개발)
 cd CHAPCHAP-Backend
 docker-compose up db -d
-
-# Spring Boot 로컬 실행
 .\gradlew.bat bootRun
 
 # 전체 스택 (AI 포함)
-.\gradlew.bat bootJar                              # 먼저 JAR 빌드
-docker-compose --profile full up --build -d        # 전체 기동
+.\gradlew.bat bootJar
+docker-compose --profile full up --build -d
 
 # 프론트엔드
 cd CHAPCHAP-Frontend
 npm run dev    # http://localhost:5173 → /api/* 를 :8080으로 프록시</code></pre>
 
-        <h2>서비스 기동 순서</h2>
-        <pre><code class="language-text">1. .\gradlew.bat bootJar     — 실행 가능한 JAR 생성
-2. docker-compose --profile full up --build -d
-   ├─► db 서비스 기동 (PostgreSQL)
-   ├─► api 서비스 빌드·기동 (JAR 복사, JRE 이미지)
-   └─► ai 서비스 빌드·기동 (Python 이미지)</code></pre>
-
         <div class="warn-box">
           <code>bootJar</code> 없이 <code>docker-compose --profile full up --build</code>를 실행하면
-          <code>api</code> 컨테이너가 오래된 JAR로 빌드됩니다. 항상 <strong>bootJar 먼저</strong> 실행하십시오.
+          <code>api</code> 컨테이너가 이전 JAR로 빌드됩니다. 항상 <strong>bootJar 먼저</strong> 실행하십시오.
         </div>
 
-        <h2>포트 맵</h2>
+        <h3>서비스 간 통신 (로컬)</h3>
+        <pre><code class="language-text">Vite Dev Server (:5173)
+  └─► /api/* 프록시 → Spring Boot (:8080)
+        ├─► PostgreSQL (:5432) — JDBC
+        └─► Python AI (:8000) — HTTP (WebClient)
+              └─► OpenAI API — HTTPS</code></pre>
+
+        <!-- ───────────────────────────── 프로덕션 배포 ───────────────────────────── -->
+        <h2>프로덕션 배포 (EC2 + Vercel)</h2>
+
+        <h3>배포 구조</h3>
+        <pre><code class="language-text">사용자
+  │
+  ├─► Vercel (프론트엔드, 정적 빌드, HTTPS)
+  │     └─► VITE_API_BASE_URL → EC2 :8080
+  │
+  └─► AWS EC2 t2.micro
+        ├─ Spring Boot :8080  (Docker, profile=full)
+        ├─ PostgreSQL  :5432  (Docker)
+        └─ Python AI   :8000  (Docker, profile=full)</code></pre>
+
+        <h3>EC2 인스턴스 설정</h3>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">서비스</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">컨테이너 포트</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">호스트 포트</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">값</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-50 text-gray-600">
-              <tr>
-                <td class="px-4 py-3">PostgreSQL</td>
-                <td class="px-4 py-3">5432</td>
-                <td class="px-4 py-3">5432</td>
-                <td class="px-4 py-3">DB 직접 접속 (개발용)</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Spring Boot</td>
-                <td class="px-4 py-3">8080</td>
-                <td class="px-4 py-3">8080</td>
-                <td class="px-4 py-3">REST API</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Python AI</td>
-                <td class="px-4 py-3">8000</td>
-                <td class="px-4 py-3">8000</td>
-                <td class="px-4 py-3">FastAPI AI 서비스</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Vite Dev</td>
-                <td class="px-4 py-3">5173</td>
-                <td class="px-4 py-3">5173</td>
-                <td class="px-4 py-3">프론트엔드 개발 서버 (컨테이너 아님)</td>
-              </tr>
+              <tr><td class="px-4 py-3">AMI</td><td class="px-4 py-3">Ubuntu Server 22.04 LTS</td></tr>
+              <tr><td class="px-4 py-3">Instance type</td><td class="px-4 py-3">t2.micro (프리 티어)</td></tr>
+              <tr><td class="px-4 py-3">Storage</td><td class="px-4 py-3">20 GiB gp3</td></tr>
+              <tr><td class="px-4 py-3">인바운드 포트</td><td class="px-4 py-3">22 (SSH, 내 IP), 8080 (API, 0.0.0.0/0)</td></tr>
+              <tr><td class="px-4 py-3">탄력적 IP</td><td class="px-4 py-3">할당 권장 — 재시작 후에도 IP 고정</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h2>환경 변수</h2>
+        <h3>EC2 초기 환경 구성</h3>
+        <pre><code class="language-bash"># Swap 2GB 설정 (1GB RAM으로 컨테이너 3개 운용에 필수)
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile && sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+# Docker 설치 후 재접속
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker ubuntu
+# exit 후 재접속
+
+# JDK 22 (SDKMAN)
+curl -s "https://get.sdkman.io" | bash
+source ~/.sdkman/bin/sdkman-init.sh
+sdk install java 22.0.2-tem</code></pre>
+
+        <div class="note-box">
+          Swap 설정을 생략하면 DB + Spring Boot + Python AI 세 컨테이너가 동시에 올라오는 시점에
+          OOM으로 프로세스가 강제 종료됩니다.
+        </div>
+
+        <h3>백엔드 배포</h3>
+        <pre><code class="language-bash">git clone https://github.com/&lt;username&gt;/CHAPCHAP-Backend.git
+cd CHAPCHAP-Backend
+
+# .env 작성 (gitignore됨 — EC2에서 직접 생성)
+cat > .env &lt;&lt; 'EOF'
+JWT_SECRET=&lt;32자 이상 임의 문자열&gt;
+OPENAI_API_KEY=&lt;키&gt;
+OPENWEATHERMAP_API_KEY=&lt;키&gt;
+REGISTRATION_SECRET=&lt;가입 코드&gt;
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://&lt;vercel-url&gt;.vercel.app
+EOF
+
+# JAR 빌드 (Dockerfile이 복사 방식이므로 먼저 필요)
+chmod +x gradlew
+./gradlew bootJar --no-daemon
+
+# 전체 스택 기동
+docker compose --profile full up --build -d
+
+# 확인
+docker compose ps
+docker compose logs -f api</code></pre>
+
+        <h3>Vercel 프론트엔드 배포</h3>
+        <ol>
+          <li>vercel.com → Add New Project → 프론트엔드 GitHub 레포 선택</li>
+          <li>Framework Preset: <strong>Vite</strong> (자동 감지)</li>
+          <li>Settings → Environment Variables에 아래 추가:</li>
+        </ol>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">Key</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">Value</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">환경</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3"><code>VITE_API_BASE_URL</code></td>
+                <td class="px-4 py-3"><code>http://&lt;EC2_PUBLIC_IP&gt;:8080</code></td>
+                <td class="px-4 py-3">Production</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>배포 완료 후 Vercel이 제공하는 URL을 EC2 <code>.env</code>의 <code>CORS_ALLOWED_ORIGINS</code>에 추가하고 <code>docker compose restart api</code>로 반영한다.</p>
+
+        <!-- ───────────────────────────── 환경변수 ───────────────────────────── -->
+        <h2>환경 변수 전체 목록</h2>
         <p><code>.env</code> 파일에 정의합니다 (gitignore됨). <code>docker-compose.yml</code>이 자동으로 로드합니다.</p>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
                 <th class="text-left px-4 py-3 font-semibold text-gray-700">변수</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">대상 서비스</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">대상</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">기본값</th>
                 <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-50 text-gray-600">
               <tr>
                 <td class="px-4 py-3"><code>JWT_SECRET</code></td>
-                <td class="px-4 py-3">Spring Boot (api)</td>
-                <td class="px-4 py-3">JWT 서명 키 (32자 이상)</td>
+                <td class="px-4 py-3">api</td>
+                <td class="px-4 py-3">dev 기본값</td>
+                <td class="px-4 py-3">JWT 서명 키 (32자 이상 필수)</td>
               </tr>
               <tr>
                 <td class="px-4 py-3"><code>OPENAI_API_KEY</code></td>
-                <td class="px-4 py-3">Python AI (ai)</td>
+                <td class="px-4 py-3">ai</td>
+                <td class="px-4 py-3">없음</td>
                 <td class="px-4 py-3">OpenAI API 키</td>
               </tr>
               <tr>
                 <td class="px-4 py-3"><code>OPENWEATHERMAP_API_KEY</code></td>
-                <td class="px-4 py-3">Spring Boot (api)</td>
+                <td class="px-4 py-3">api</td>
+                <td class="px-4 py-3"><code>dev-placeholder</code></td>
                 <td class="px-4 py-3">OpenWeatherMap API 키</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>REGISTRATION_SECRET</code></td>
+                <td class="px-4 py-3">api</td>
+                <td class="px-4 py-3">빈값 (가입 불가)</td>
+                <td class="px-4 py-3">회원가입 가입 코드. 빈값이면 항상 403 반환</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3"><code>CORS_ALLOWED_ORIGINS</code></td>
+                <td class="px-4 py-3">api</td>
+                <td class="px-4 py-3"><code>http://localhost:5173</code></td>
+                <td class="px-4 py-3">쉼표 구분 허용 Origin 목록</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="note-box">
-          <code>.env</code> 파일은 절대 커밋하지 않습니다. <code>.gitignore</code>에 등록되어 있으며,
-          새 환경 설정 시 직접 생성해야 합니다.
+          <code>CORS_ALLOWED_ORIGINS</code>는 쉼표로 여러 값을 지정할 수 있습니다.
+          예: <code>http://localhost:5173,https://chapchap.vercel.app</code><br />
+          값을 변경한 뒤에는 <code>docker compose restart api</code>만 실행하면 됩니다 (전체 재빌드 불필요).
         </div>
 
-        <h2>서비스 간 통신</h2>
-        <pre><code class="language-text">Vite Dev Server (:5173)
-  └─► /api/* 프록시 → Spring Boot (:8080)
-        ├─► PostgreSQL (:5432) — JDBC
-        └─► Python AI (:8000) — HTTP (WebClient)
-              └─► OpenAI API — HTTPS</code></pre>
+        <!-- ───────────────────────────── 재배포 ───────────────────────────── -->
+        <h2>재배포 방법</h2>
+
+        <h3>백엔드 코드 변경 시</h3>
+        <pre><code class="language-bash">cd CHAPCHAP-Backend
+git pull
+./gradlew bootJar --no-daemon
+docker compose --profile full up --build -d</code></pre>
+
+        <h3>환경변수만 변경 시</h3>
+        <pre><code class="language-bash"># .env 수정 후
+docker compose restart api</code></pre>
+
+        <h3>프론트엔드</h3>
+        <p>GitHub에 push하면 Vercel이 자동 재배포합니다.</p>
+
+        <h3>로그 확인</h3>
+        <pre><code class="language-bash">docker compose logs -f api          # Spring 실시간 로그
+docker compose logs --tail=100 ai   # AI 최근 100줄
+docker compose ps                   # 컨테이너 상태</code></pre>
 
       </div>
     </main>
