@@ -7,20 +7,22 @@ body { font-family: 'Noto Sans KR', 'Manrope', sans-serif; }
 
 /* === Typography === */
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-top: 3.5rem;
   margin-bottom: 1rem;
+  padding-bottom: 0.6rem;
   color: #101622;
+  border-bottom: 2px solid #e5e7eb;
 }
 h3 {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-top: 1.75rem;
+  margin-top: 2rem;
   margin-bottom: 0.75rem;
   color: #1f2937;
   padding-bottom: 0.4rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #e5e7eb;
 }
 p {
   color: #4b5563;
