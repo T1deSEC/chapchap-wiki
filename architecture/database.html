@@ -575,7 +575,19 @@
         </div>
 
         <!-- ───────────────────────────────────────────── -->
-        <h2>테이블 관계 (ERD)</h2>
+        <h2>ERD</h2>
+        <p>클릭하면 확대됩니다.</p>
+
+        <div class="relative bg-white rounded-xl border border-gray-100 overflow-hidden mb-8 cursor-zoom-in"
+             id="erd-wrap" onclick="openErdModal()">
+          <div id="erd-hover-hint"
+               class="hidden absolute top-3 right-3 text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10"
+               style="background:rgba(19,91,236,0.85);">클릭하여 확대</div>
+          <img src="../chapchap_erd.png" alt="CHAPCHAP ERD" class="w-full h-auto block" />
+        </div>
+
+        <!-- ───────────────────────────────────────────── -->
+        <h2>테이블 간 매핑 관계</h2>
 
         <pre><code class="language-text">users
   ├── user_skin_profile              (1:1)
@@ -603,6 +615,80 @@ products
       </div>
     </main>
   </div>
+
+  <!-- ERD Zoom Modal -->
+  <div id="erd-modal"
+       class="hidden fixed inset-0 z-[200] bg-black/75 items-center justify-center p-6"
+       onclick="handleErdBackdrop(event)">
+    <div class="bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+         style="width:92vw; height:88vh;"
+         onclick="event.stopPropagation()">
+      <!-- toolbar -->
+      <div class="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-gray-50 rounded-t-2xl flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <button onclick="erdZoomBy(-0.25)"
+                  class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-600 font-bold text-lg leading-none">−</button>
+          <span id="erd-zoom-label" class="text-xs text-gray-500 w-12 text-center">100%</span>
+          <button onclick="erdZoomBy(0.25)"
+                  class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-600 font-bold text-lg leading-none">+</button>
+          <button onclick="erdResetZoom()"
+                  class="px-3 h-8 text-xs rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-600">초기화</button>
+        </div>
+        <button onclick="closeErdModal()"
+                class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700 text-lg leading-none">✕</button>
+      </div>
+      <!-- image -->
+      <div class="overflow-auto flex-1 p-4 flex items-start justify-center" id="erd-scroll">
+        <img id="erd-modal-img" src="../chapchap_erd.png" alt="CHAPCHAP ERD"
+             style="width:100%; height:auto; min-width:900px; display:block;" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let _erdScale = 1;
+
+    const erdWrap = document.getElementById('erd-wrap');
+    const erdHint = document.getElementById('erd-hover-hint');
+    erdWrap.addEventListener('mouseenter', () => erdHint.classList.remove('hidden'));
+    erdWrap.addEventListener('mouseleave', () => erdHint.classList.add('hidden'));
+
+    function openErdModal() {
+      _erdScale = 1;
+      document.getElementById('erd-modal-img').style.width = '100%';
+      document.getElementById('erd-zoom-label').textContent = '100%';
+      document.getElementById('erd-modal').classList.remove('hidden');
+      document.getElementById('erd-modal').classList.add('flex');
+    }
+
+    function closeErdModal() {
+      document.getElementById('erd-modal').classList.add('hidden');
+      document.getElementById('erd-modal').classList.remove('flex');
+    }
+
+    function handleErdBackdrop(e) {
+      if (e.target === document.getElementById('erd-modal')) closeErdModal();
+    }
+
+    function erdZoomBy(delta) {
+      const img = document.getElementById('erd-modal-img');
+      const scroll = document.getElementById('erd-scroll');
+      const baseW = scroll.clientWidth;
+      _erdScale = Math.min(4, Math.max(0.25, _erdScale + delta));
+      img.style.width = Math.max(900, baseW * _erdScale) + 'px';
+      document.getElementById('erd-zoom-label').textContent = Math.round(_erdScale * 100) + '%';
+    }
+
+    function erdResetZoom() {
+      _erdScale = 1;
+      document.getElementById('erd-modal-img').style.width = '100%';
+      document.getElementById('erd-zoom-label').textContent = '100%';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeErdModal();
+    });
+  </script>
 
 </body>
 </html>
