@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>에러 코드 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="../troubleshooting.html" class="sidebar-link">트러블슈팅</a>
+
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="../architecture/overview.html" class="sidebar-link">개요</a>
+        <a href="../architecture/frontend.html" class="sidebar-link">프론트엔드</a>
+        <a href="../architecture/backend.html" class="sidebar-link">백엔드</a>
+        <a href="../architecture/database.html" class="sidebar-link">DB 스키마</a>
+        <a href="../architecture/ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="../architecture/auth-security.html" class="sidebar-link">인증 &amp; 보안</a>
+        <a href="../architecture/deployment.html" class="sidebar-link">배포</a>
+
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <a href="error-codes.html" class="sidebar-link active">에러 코드</a>
+
+        <div class="sidebar-group-label mt-3">AI 에이전트 설계 및 철학</div>
+        <a href="../philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="../philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+        <a href="../philosophy/routine-conflict.html" class="sidebar-link">루틴 충돌 분석</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">API 레퍼런스</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">에러 코드</h1>
+        <p class="text-gray-400 text-sm mb-10"><code>BusinessException(ErrorCode, HttpStatus)</code> 기반 에러 응답 레퍼런스</p>
+
+        <!-- ───── 응답 형식 ───── -->
+        <h2>에러 응답 형식</h2>
+        <p>모든 에러 응답은 공통 래퍼 <code>ApiResponse</code>를 사용합니다.</p>
+        <pre><code class="language-json">{
+  "success": false,
+  "data": null,
+  "message": "에러 메시지 (ErrorCode.message)"
+}</code></pre>
+        <p>에러 메시지는 <code>ErrorCode</code> 열거형에 정의된 한국어 문자열이 그대로 내려갑니다. <code>GlobalExceptionHandler</code>가 <code>BusinessException</code>을 캐치해 HTTP 상태 코드와 함께 이 형식으로 반환합니다.</p>
+
+        <!-- ───── 에러 코드 전체 목록 ───── -->
+        <h2>에러 코드 전체 목록</h2>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">ErrorCode</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">HTTP</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">메시지</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">발생 상황</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">INVALID_INPUT</td>
+                <td class="px-4 py-3">400 / 503 ★</td>
+                <td class="px-4 py-3">잘못된 입력입니다</td>
+                <td class="px-4 py-3">피부 프로필 미설정(400), AI 서비스 호출 실패(503)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">RESOURCE_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">리소스를 찾을 수 없습니다</td>
+                <td class="px-4 py-3">범용 리소스 미발견 (잘 사용되지 않음)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">INVALID_CREDENTIALS</td>
+                <td class="px-4 py-3">401</td>
+                <td class="px-4 py-3">이메일 또는 비밀번호가 잘못되었습니다</td>
+                <td class="px-4 py-3">로그인 실패, 비밀번호 변경 시 현재 비밀번호 불일치</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">DUPLICATE_EMAIL</td>
+                <td class="px-4 py-3">409</td>
+                <td class="px-4 py-3">이미 사용 중인 이메일입니다</td>
+                <td class="px-4 py-3">회원가입 시 이미 존재하는 이메일</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">INVALID_TOKEN</td>
+                <td class="px-4 py-3">401</td>
+                <td class="px-4 py-3">유효하지 않은 토큰입니다</td>
+                <td class="px-4 py-3">JWT 서명·형식 오류, 리프레시 토큰 미발견</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">EXPIRED_TOKEN</td>
+                <td class="px-4 py-3">401</td>
+                <td class="px-4 py-3">만료된 토큰입니다</td>
+                <td class="px-4 py-3">액세스 토큰 만료 (30분), 리프레시 토큰 만료 (14일)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">USER_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">사용자를 찾을 수 없습니다</td>
+                <td class="px-4 py-3">JWT subject userId에 해당하는 유저 DB에 없음</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">PRODUCT_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">제품을 찾을 수 없습니다</td>
+                <td class="px-4 py-3">존재하지 않는 productId로 조회·루틴 추가·피드백 작성</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">INGREDIENT_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">성분을 찾을 수 없습니다</td>
+                <td class="px-4 py-3">성분 선호도 삭제 시 해당 ingredientId 미발견</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">DIARY_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">일기를 찾을 수 없습니다</td>
+                <td class="px-4 py-3">해당 날짜 일기 미발견 (조회·수정·삭제)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">DIARY_ALREADY_EXISTS</td>
+                <td class="px-4 py-3">409</td>
+                <td class="px-4 py-3">해당 날짜에 이미 일기가 존재합니다</td>
+                <td class="px-4 py-3">같은 날짜에 일기 중복 생성 시도</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs text-gray-400">DIARY_ACCESS_DENIED</td>
+                <td class="px-4 py-3 text-gray-400">—</td>
+                <td class="px-4 py-3 text-gray-400">일기에 접근할 권한이 없습니다</td>
+                <td class="px-4 py-3 text-gray-400">정의됨, 현재 미사용 ★★</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">ROUTINE_NOT_FOUND</td>
+                <td class="px-4 py-3">404</td>
+                <td class="px-4 py-3">루틴을 찾을 수 없습니다</td>
+                <td class="px-4 py-3">해당 period 루틴 미발견 (조회·수정·삭제)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs text-gray-400">ROUTINE_ACCESS_DENIED</td>
+                <td class="px-4 py-3 text-gray-400">—</td>
+                <td class="px-4 py-3 text-gray-400">루틴에 접근할 권한이 없습니다</td>
+                <td class="px-4 py-3 text-gray-400">정의됨, 현재 미사용 ★★</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">INVALID_REGISTRATION_TOKEN</td>
+                <td class="px-4 py-3">403</td>
+                <td class="px-4 py-3">유효하지 않은 가입 코드입니다</td>
+                <td class="px-4 py-3">회원가입 시 <code>registrationToken</code>이 <code>REGISTRATION_SECRET</code>과 불일치</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-xs">REGISTRATION_TOO_MANY_ATTEMPTS</td>
+                <td class="px-4 py-3">429</td>
+                <td class="px-4 py-3">가입 시도 횟수가 초과되었습니다</td>
+                <td class="px-4 py-3">동일 IP에서 10회 가입 실패 시 1시간 차단</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ───── 특수 케이스 ───── -->
+        <h2>특수 케이스</h2>
+
+        <h3>★ INVALID_INPUT — HTTP 상태 코드가 두 가지</h3>
+        <p><code>BusinessException</code>은 <code>ErrorCode</code>와 <code>HttpStatus</code>를 분리해 받습니다. <code>INVALID_INPUT</code>은 동일한 에러 코드가 상황에 따라 다른 HTTP 상태 코드로 내려갑니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">상황</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">HTTP</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">throw 위치</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3">AI 분석 요청 시 피부 프로필 미설정</td>
+                <td class="px-4 py-3 font-semibold text-blue-700">400 Bad Request</td>
+                <td class="px-4 py-3"><code>AiAnalysisService</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Python AI 서비스 호출 실패 (네트워크·타임아웃)</td>
+                <td class="px-4 py-3 font-semibold text-red-700">503 Service Unavailable</td>
+                <td class="px-4 py-3"><code>AiAnalysisService</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <pre><code class="language-java">// AiAnalysisService.java
+throw new BusinessException(ErrorCode.INVALID_INPUT, HttpStatus.BAD_REQUEST);   // 400
+throw new BusinessException(ErrorCode.INVALID_INPUT, HttpStatus.SERVICE_UNAVAILABLE); // 503</code></pre>
+        <div class="warn-box">
+          클라이언트가 <code>message: "잘못된 입력입니다"</code>를 받았다면 HTTP 상태 코드로 원인을 구분합니다. 400은 요청 수정이 필요하고, 503은 서버 측 문제로 재시도 대상입니다.
+        </div>
+
+        <h3>★★ DIARY_ACCESS_DENIED / ROUTINE_ACCESS_DENIED — 미사용</h3>
+        <p><code>ErrorCode</code> 열거형에는 정의되어 있지만 현재 어떤 서비스에서도 throw하지 않습니다. 일기·루틴은 현재 소유자 확인 없이 userId 기준 조회만 수행합니다. 향후 공유 기능 추가 시 사용할 예정입니다.</p>
+
+        <!-- ───── 구현 구조 ───── -->
+        <h2>구현 구조</h2>
+        <pre><code class="language-java">// BusinessException.java
+public class BusinessException extends RuntimeException {
+    private final ErrorCode errorCode;
+    private final HttpStatus httpStatus;
+
+    public BusinessException(ErrorCode errorCode, HttpStatus httpStatus) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.httpStatus = httpStatus;
+    }
+}</code></pre>
+        <pre><code class="language-java">// GlobalExceptionHandler.java
+@ExceptionHandler(BusinessException.class)
+public ResponseEntity&lt;ApiResponse&lt;Void&gt;&gt; handleBusinessException(BusinessException ex) {
+    return ResponseEntity
+        .status(ex.getHttpStatus())
+        .body(ApiResponse.error(ex.getMessage()));
+}</code></pre>
+        <div class="note-box">
+          대부분의 에러 코드는 고정 HTTP 상태 코드와 함께 throw됩니다. 예: <code>throw new BusinessException(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND)</code>. 각 서비스 클래스에서 적절한 HttpStatus를 직접 지정합니다.
+        </div>
+
+        <!-- ───── Spring Security 에러 ───── -->
+        <h2>Spring Security 에러 (BusinessException 외)</h2>
+        <p>인증·인가 실패는 <code>BusinessException</code>을 거치지 않고 Spring Security가 직접 처리합니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">상황</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">HTTP</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">처리 주체</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3">Authorization 헤더 없음 / JWT 검증 실패</td>
+                <td class="px-4 py-3 font-semibold">401</td>
+                <td class="px-4 py-3"><code>JwtAuthenticationFilter</code> → <code>authenticationEntryPoint</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">인증은 됐으나 권한 부족</td>
+                <td class="px-4 py-3 font-semibold">403</td>
+                <td class="px-4 py-3"><code>accessDeniedHandler</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note-box">
+          SecurityConfig에 <code>authenticationEntryPoint</code>가 명시적으로 설정되어 있어 인증 실패 시 403이 아닌 <strong>401</strong>이 반환됩니다. 미인증 상태에서 보호된 API를 호출하면 항상 401을 기대합니다.
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

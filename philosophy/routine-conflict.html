@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>루틴 충돌 분석 에이전트 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="../troubleshooting.html" class="sidebar-link">트러블슈팅</a>
+
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="../architecture/overview.html" class="sidebar-link">개요</a>
+        <a href="../architecture/frontend.html" class="sidebar-link">프론트엔드</a>
+        <a href="../architecture/backend.html" class="sidebar-link">백엔드</a>
+        <a href="../architecture/database.html" class="sidebar-link">DB 스키마</a>
+        <a href="../architecture/ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="../architecture/auth-security.html" class="sidebar-link">인증 &amp; 보안</a>
+        <a href="../architecture/deployment.html" class="sidebar-link">배포</a>
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="../api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="../api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="../api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <a href="../api/error-codes.html" class="sidebar-link">에러 코드</a>
+        <div class="sidebar-group-label mt-3">AI 에이전트 설계 및 철학</div>
+        <a href="ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+        <a href="routine-conflict.html" class="sidebar-link active">루틴 충돌 분석</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-3xl mx-auto px-10 py-12">
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">AI 에이전트 설계 및 철학</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">루틴 충돌 분석 에이전트</h1>
+        <p class="text-gray-400 text-sm mb-10">LangGraph StateGraph로 성분 충돌을 감지하고 사용자 친화적 피드백을 생성하는 원리</p>
+
+        <h2>에이전트 개요</h2>
+        <p>루틴 충돌 분석은 LangGraph <code>StateGraph</code>로 구현됩니다. <code>POST /analyze/routine</code> 엔드포인트가 요청을 받으면 그래프를 새로 컴파일·실행합니다. 상태는 단일 실행에만 존재하고 세션 간 공유되지 않습니다.</p>
+
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">내용</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3">그래프 유형</td><td class="px-4 py-3"><code>StateGraph(RoutineAnalysisState)</code></td></tr>
+              <tr><td class="px-4 py-3">LLM 모델</td><td class="px-4 py-3">gpt-4o-mini (환경변수 <code>LLM_MODEL</code>으로 오버라이드 가능)</td></tr>
+              <tr><td class="px-4 py-3">도구</td><td class="px-4 py-3"><code>get_product_ingredients</code>, <code>find_potentially_conflicting_ingredients</code></td></tr>
+              <tr><td class="px-4 py-3">에이전트 패턴</td><td class="px-4 py-3">첫 노드만 ReAct (<code>create_react_agent</code>), 이후 노드는 단순 LLM 호출</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>StateGraph 구조</h2>
+        <pre><code class="language-text">입력: productIds[] + routinePeriod + userSkinType
+
+  [collect_conflicts]  ←── 진입점 (ReAct 에이전트)
+         │
+         ▼ _route_after_conflicts
+    ┌────┴────────────┬──────────────────┐
+    │ has_conflicts   │ has_caution      │ no_conflicts
+    ▼                 ▼                  ▼
+[generate_      [recommend_       [recommend_
+ recommendation] complementary]   complementary]
+    │
+    ▼
+[generate_adjustments]
+    │
+    ▼
+   END</code></pre>
+
+        <h2>노드별 역할</h2>
+
+        <h3>① collect_conflicts (ReAct 에이전트)</h3>
+        <p>그래프의 유일한 도구 활용 노드입니다. 사전에 빌드된 ReAct 에이전트(<code>create_react_agent</code>)를 재사용하고, 결과 JSON을 파싱해 상태를 결정합니다.</p>
+        <ol>
+          <li><code>get_product_ingredients</code>로 각 제품의 전 성분 목록 조회 (concentration_order 포함)</li>
+          <li><code>find_potentially_conflicting_ingredients</code>로 후보 성분 상세 정보 확인</li>
+          <li>LLM이 충돌 여부 최종 판단 → JSON 반환</li>
+          <li>코드가 JSON을 파싱해 <code>conflicting_pairs</code>와 <code>has_caution</code> 추출</li>
+        </ol>
+        <div class="note-box">
+          ReAct 에이전트 인스턴스(<code>_agent</code>)는 모듈 전역에서 하나만 생성해 재사용합니다. 상태가 없으므로 동시 요청 간 공유해도 안전합니다.
+        </div>
+
+        <h3>② generate_recommendation (conflict 경로)</h3>
+        <p>발견된 충돌 쌍을 하나씩 구체적으로 짚어가며 권장 사용 방법을 생성합니다. LLM 응답은 raw 텍스트(JSON 아님)로 받아 그대로 <code>recommendation</code> 필드에 저장합니다.</p>
+        <ul>
+          <li>충돌 쌍 수에 비례해 <code>max_tokens</code>를 동적으로 늘립니다 (<code>2048 + len(pairs) × 200</code>)</li>
+          <li>한국어명 + INCI 영문명 형식(<code>"히알루론산(HYALURONIC ACID)"</code>)은 DB에서 일괄 조회해 LLM 응답 파싱 후 코드가 붙입니다</li>
+        </ul>
+
+        <h3>③ generate_adjustments (conflict 경로)</h3>
+        <p>앞 노드의 <code>recommendation</code>과 내용이 어긋나지 않도록, 실제 제품명을 활용한 구체적 루틴 조정 방안을 JSON 배열로 생성합니다.</p>
+        <pre><code class="language-json">["비타민C 세럼은 아침에, 레티놀 크림은 저녁에 나누어 사용해보세요.",
+ "AHA 토너 사용 직후 레티놀 제품 적용은 피해주세요."]</code></pre>
+
+        <h3>④ recommend_complementary (caution / good 경로)</h3>
+        <p>충돌이 없거나 주의 수준일 때 진입하는 노드입니다. 현재 루틴에 부족한 효과를 파악해 보완 성분을 제안합니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">진입 조건</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">첫 문장 맥락</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3"><code>has_caution = true</code></td><td class="px-4 py-3">직접 충돌은 없지만 주의 필요 성분 조합이 있음을 부드럽게 전달</td></tr>
+              <tr><td class="px-4 py-3"><code>has_caution = false</code></td><td class="px-4 py-3">같이 쓰기 까다로운 조합이 없어 안심하고 사용해도 된다고 안내</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>상태(status) 결정 로직</h2>
+        <p>상태는 LLM이 직접 결정하지 않습니다. <code>collect_conflicts</code>가 반환한 두 값으로 코드가 결정론적으로 파생합니다.</p>
+        <div class="formula-box">
+          <span class="dim">// _route_after_conflicts 함수</span><br/>
+          conflicting_pairs가 비어있지 않으면 → <span style="color:#fca5a5">"conflict"</span><br/>
+          비어있고 has_caution = true   → <span style="color:#fde68a">"caution"</span><br/>
+          비어있고 has_caution = false  → <span style="color:#86efac">"good"</span>
+        </div>
+        <div class="note-box">
+          LLM이 JSON에서 <code>"conflicting_pairs"</code>에 실제 쌍을 넣으면 자동으로 <code>conflict</code>가 됩니다. 빈 배열이면 <code>has_caution</code> 플래그가 결정권을 가집니다. LLM의 자연어 "status" 판단에 의존하지 않아 일관성을 확보합니다.
+        </div>
+
+        <h2>알림 트리거</h2>
+        <p>분석 결과는 Spring Boot <code>AiAnalysisService</code>가 Python 응답을 받은 뒤 처리합니다.</p>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">status</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">알림 타입</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">DB 저장</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr><td class="px-4 py-3 text-red-700 font-semibold">conflict</td><td class="px-4 py-3"><code>ROUTINE_CONFLICT</code></td><td class="px-4 py-3">notifications 테이블에 INSERT</td></tr>
+              <tr><td class="px-4 py-3 text-yellow-700 font-semibold">caution</td><td class="px-4 py-3"><code>ROUTINE_CAUTION</code></td><td class="px-4 py-3">notifications 테이블에 INSERT</td></tr>
+              <tr><td class="px-4 py-3 text-green-700 font-semibold">good</td><td class="px-4 py-3">없음</td><td class="px-4 py-3">알림 없음</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>상태 필드 전체 목록</h2>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">필드</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">타입</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">초기값 / 설명</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600 text-sm">
+              <tr><td class="px-4 py-3 font-mono">routine_period</td><td class="px-4 py-3">str</td><td class="px-4 py-3">요청의 <code>routinePeriod</code> (AM/PM)</td></tr>
+              <tr><td class="px-4 py-3 font-mono">user_skin_type</td><td class="px-4 py-3">str</td><td class="px-4 py-3">요청의 <code>userSkinType</code></td></tr>
+              <tr><td class="px-4 py-3 font-mono">products_str</td><td class="px-4 py-3">str</td><td class="px-4 py-3">DB 조회한 "제품 ID: 제품명" 리스트 문자열</td></tr>
+              <tr><td class="px-4 py-3 font-mono">status</td><td class="px-4 py-3">str</td><td class="px-4 py-3">초기값 <code>"good"</code> → collect_conflicts에서 결정</td></tr>
+              <tr><td class="px-4 py-3 font-mono">has_caution</td><td class="px-4 py-3">bool</td><td class="px-4 py-3">충돌은 없지만 피부 타입 기준 주의 성분 조합 존재 여부</td></tr>
+              <tr><td class="px-4 py-3 font-mono">conflicting_pairs</td><td class="px-4 py-3">list[dict]</td><td class="px-4 py-3"><code>{ingredient1, ingredient2, reason}</code> 형식</td></tr>
+              <tr><td class="px-4 py-3 font-mono">recommendation</td><td class="px-4 py-3">str</td><td class="px-4 py-3">사용자에게 보여줄 권장 메시지</td></tr>
+              <tr><td class="px-4 py-3 font-mono">suggested_adjustments</td><td class="px-4 py-3">list[str]</td><td class="px-4 py-3">실행 가능한 루틴 조정 방안 목록</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>설계 원칙</h2>
+        <ul>
+          <li><strong>결정론적 상태 파생</strong> — <code>status</code>는 LLM 자연어 판단이 아니라 코드가 <code>conflicting_pairs</code> 유무로 결정합니다. LLM이 프롬프트에 따라 의도치 않은 "conflict"를 반환해도 실제 쌍이 없으면 무시됩니다.</li>
+          <li><strong>한국어명 후처리</strong> — LLM에게 INCI 영문명만 반환하게 하고, 한국어 매핑은 DB에서 일괄 조회합니다. LLM이 잘못된 한국어명을 생성하는 hallucination을 방지합니다.</li>
+          <li><strong>ReAct 에이전트 범위 제한</strong> — 도구 호출이 필요한 <code>collect_conflicts</code>만 ReAct 패턴을 사용합니다. 이후 노드는 단순 LLM 호출로 비용을 절감하고 예측 가능성을 높입니다.</li>
+        </ul>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

@@ -43,6 +43,7 @@
         <div class="sidebar-group-label">시작</div>
         <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
         <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="../troubleshooting.html" class="sidebar-link">트러블슈팅</a>
 
         <div class="sidebar-group-label mt-3">아키텍처</div>
         <a href="../architecture/overview.html" class="sidebar-link">개요</a>
@@ -59,15 +60,17 @@
         <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
         <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
         <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
-        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../api/error-codes.html" class="sidebar-link">에러 코드</a>
+        <div class="sidebar-group-label mt-3">AI 에이전트 설계 및 철학</div>
         <a href="ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
         <a href="safety-score.html" class="sidebar-link active">안전도 점수 계산</a>
+        <a href="routine-conflict.html" class="sidebar-link">루틴 충돌 분석</a>
       </nav>
     </aside>
 
     <main class="ml-60 flex-1 min-h-screen">
       <div class="max-w-3xl mx-auto px-10 py-12">
-        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">AI 설계 철학</p>
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">AI 에이전트 설계 및 철학</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">안전도 점수 계산</h1>
         <p class="text-gray-400 text-sm mb-10">LLM의 주관적 추정을 코드가 결정론적으로 변환하는 원리</p>
 
@@ -181,6 +184,21 @@
           <li><strong>농도 가중치</strong> — 0.1% 미만 미량 성분이 safety_score를 크게 끌어내리는 것을 방지합니다.</li>
           <li><strong>multiplier 세 단계</strong> — assessment(적합/주의/부적합)에 따라 concern_score의 영향력을 조절합니다. "부적합이지만 concern 낮음"과 "적합이지만 concern 높음"을 서로 다르게 다룹니다.</li>
         </ul>
+
+        <h2>LangGraph 에이전트 내 위치</h2>
+        <p>안전도 점수 계산은 성분 분석 StateGraph의 <code>aggregate_score</code> 노드에서 실행됩니다.</p>
+        <pre><code class="language-text">입력: product_id + user_skin_type + user_skin_concerns
+  └─► collect_and_triage       (LLM이 분석 대상 성분 선별, 최대 10개)
+        └─► analyze_one_ingredient  (병렬 실행 — 성분별 GPT 호출)
+                                    concern_score + assessment 추정
+              └─► aggregate_score   ◄─ ★ 이 페이지의 알고리즘
+                    └─► generate_summary  (전체 요약 + skin_impacts 생성)</code></pre>
+        <div class="note-box">
+          <code>analyze_one_ingredient</code>는 LangGraph <code>Send</code> API로 병렬 실행됩니다. 선별된 성분이 n개면 GPT 호출이 n번 동시에 발생하고, 결과가 <code>Annotated[list, operator.add]</code> 상태 필드에 합산된 뒤 <code>aggregate_score</code>에서 일괄 처리됩니다.
+        </div>
+        <div class="warn-box">
+          <code>safety_level</code>(<code>"안전"</code> / <code>"주의"</code> / <code>"위험"</code>)은 <code>aggregate_score</code> 노드에서 코드가 결정론적으로 부여합니다. LLM이 직접 레벨을 결정하지 않습니다 — 이것이 "역할 분리 원칙"의 핵심입니다.
+        </div>
 
       </div>
     </main>

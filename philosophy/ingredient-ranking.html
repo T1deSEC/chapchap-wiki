@@ -43,6 +43,7 @@
         <div class="sidebar-group-label">시작</div>
         <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
         <a href="../getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="../troubleshooting.html" class="sidebar-link">트러블슈팅</a>
 
         <div class="sidebar-group-label mt-3">아키텍처</div>
         <a href="../architecture/overview.html" class="sidebar-link">개요</a>
@@ -59,15 +60,17 @@
         <a href="../api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
         <a href="../api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
         <a href="../api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
-        <div class="sidebar-group-label mt-3">AI 설계 철학</div>
+        <a href="../api/error-codes.html" class="sidebar-link">에러 코드</a>
+        <div class="sidebar-group-label mt-3">AI 에이전트 설계 및 철학</div>
         <a href="ingredient-ranking.html" class="sidebar-link active">성분 랭킹 알고리즘</a>
         <a href="safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+        <a href="routine-conflict.html" class="sidebar-link">루틴 충돌 분석</a>
       </nav>
     </aside>
 
     <main class="ml-60 flex-1 min-h-screen">
       <div class="max-w-3xl mx-auto px-10 py-12">
-        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">AI 설계 철학</p>
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">AI 에이전트 설계 및 철학</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">성분 랭킹 알고리즘</h1>
         <p class="text-gray-400 text-sm mb-10">개인화 제품 추천에 사용되는 match_score 계산 원리</p>
 
@@ -138,6 +141,18 @@
           <li><strong>DB 실존 성분만 추천</strong> — <code>search_ingredients_by_function</code> 툴로 DB에 실제 존재하는 성분만 선정. LLM hallucination으로 존재하지 않는 INCI명을 추천하면 match_score 계산이 불가능합니다.</li>
           <li><strong>기피 성분 최소화</strong> — 알레르기나 피부 악화 가능성이 명확히 문서화된 케이스만 등록. 일반적인 "좋지 않은" 성분을 전부 기피로 넣으면 추천 결과가 너무 줄어듭니다.</li>
         </ol>
+
+        <h2>성분 추천 에이전트 전체 흐름</h2>
+        <p>match_score는 추천 에이전트의 마지막 단계에서 제품 순위를 결정할 때 사용됩니다.</p>
+        <pre><code class="language-text">1. LLM이 피부 타입·고민으로 추천 성분 INCI명 후보 선정 (5~8개)
+2. DB 검증 — DB에 실존하는 성분만 통과 (get_ingredients_by_inci_names, 코드 직접 호출)
+3. LLM이 기피 성분 후보 선별 → 최종 추천·기피 성분 확정
+4. Spring Boot: DB에 결과 저장 → INGREDIENT_RECOMMENDATION 알림 발송
+5. 룰 기반: 각 제품에서 match_score 계산 → 상위 제품 추천 목록 반환</code></pre>
+        <div class="note-box">
+          성분 추천 에이전트는 LangGraph StateGraph가 아닌 <strong>순차 함수 파이프라인</strong>으로 구현됩니다. 단방향 흐름이고 분기가 없어 Graph 구조가 필요하지 않습니다.
+        </div>
+        <p>match_score 계산 코드는 Spring Boot 서버(<code>IngredientRecommendationService</code>)에 있습니다. Python AI 서비스가 추천 성분 목록을 반환하면, Spring Boot가 DB의 제품들을 순회하며 각 제품에 대해 match_score를 산출하고 순위가 높은 제품만 응답합니다.</p>
 
       </div>
     </main>
