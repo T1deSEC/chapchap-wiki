@@ -75,48 +75,187 @@
 
         <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">AI 서비스</h1>
-        <p class="text-gray-400 text-sm mb-10">FastAPI + LangGraph 구조, 성분·루틴 분석 플로우, Spring Boot 연동.</p>
+        <p class="text-gray-400 text-sm mb-10">FastAPI + LangGraph 기반 AI 마이크로서비스의 전체 설계 — 에이전트 그래프, 상태, 라우팅, 알고리즘, Spring Boot 연동까지.</p>
 
+        <!-- 서비스 개요 -->
         <h2 class="mt-0">서비스 개요</h2>
-        <p>Python FastAPI 서버(:8000)로 분리된 AI 마이크로서비스입니다. Spring Boot가 WebClient로 HTTP 요청을 보내며, LangGraph와 OpenAI gpt-4o-mini를 사용해 성분 분석·루틴 진단을 수행합니다.</p>
+        <p>CHAPCHAP AI 서비스는 Spring Boot 백엔드와 분리된 Python 마이크로서비스입니다. FastAPI(:8000)를 HTTP 인터페이스로 사용하며, 내부에서 LangGraph StateGraph와 OpenAI <code>gpt-4o-mini</code>를 조합해 세 가지 AI 기능을 제공합니다.</p>
 
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">메서드</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">경로</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">설명</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">기능</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">구현 방식</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">엔드포인트</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-50 text-gray-600">
-              <tr><td class="px-4 py-3">POST</td><td class="px-4 py-3"><code>/analyze/ingredient</code></td><td class="px-4 py-3">제품 성분 AI 분석 (LangGraph StateGraph)</td></tr>
-              <tr><td class="px-4 py-3">POST</td><td class="px-4 py-3"><code>/analyze/routine</code></td><td class="px-4 py-3">AM/PM 루틴 갈등 진단 (ReAct agent)</td></tr>
-              <tr><td class="px-4 py-3">POST</td><td class="px-4 py-3"><code>/recommend/ingredients</code></td><td class="px-4 py-3">성분 추천</td></tr>
-              <tr><td class="px-4 py-3">GET</td><td class="px-4 py-3"><code>/health</code></td><td class="px-4 py-3">헬스체크</td></tr>
+              <tr>
+                <td class="px-4 py-3">성분 분석</td>
+                <td class="px-4 py-3">LangGraph StateGraph (4-node, 병렬 Send)</td>
+                <td class="px-4 py-3"><code>POST /analyze/ingredient</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">루틴 충돌 진단</td>
+                <td class="px-4 py-3">LangGraph StateGraph (4-node, ReAct agent)</td>
+                <td class="px-4 py-3"><code>POST /analyze/routine</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">성분 추천</td>
+                <td class="px-4 py-3">순차 파이프라인 (StateGraph 없음)</td>
+                <td class="px-4 py-3"><code>POST /recommend/ingredients</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">헬스체크</td>
+                <td class="px-4 py-3">—</td>
+                <td class="px-4 py-3"><code>GET /health</code></td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>성분 분석 플로우</h2>
-        <pre><code class="language-text">입력: 제품 성분 목록 + 사용자 피부 프로필
-  └─► collect_and_triage          (성분 수집·분류)
-        └─► analyze_one_ingredient  (병렬, 성분별 GPT 호출)
-              └─► aggregate_score   (안전도 점수 가중 평균 계산)
-                    └─► generate_summary (최종 요약 생성)
+        <p>모든 POST 엔드포인트는 Pydantic 모델의 <code>alias_generator=to_camel</code>과 <code>response_model_by_alias=True</code>를 통해 Spring Boot와 camelCase JSON으로 통신합니다. 오류 발생 시 <code>product_id</code>·<code>skin_type</code> 컨텍스트를 로깅한 후 <code>HTTPException(500)</code>을 반환합니다.</p>
 
-출력: IngredientAnalysis[] + safety_score(0-100)</code></pre>
+        <!-- Pydantic 스키마 -->
+        <h2>Pydantic 스키마</h2>
+        <p>모든 모델은 다음 설정을 공유합니다.</p>
+        <pre><code class="language-python">_camel = ConfigDict(alias_generator=to_camel, populate_by_name=True)</code></pre>
 
-        <p>각 성분은 11개 피부 영향 카테고리로 평가됩니다.</p>
+        <h3>성분 분석 입출력</h3>
+        <pre><code class="language-python">class IngredientAnalysisInput(BaseModel):
+    model_config = _camel
+    product_id: int
+    user_skin_type: Optional[str] = None          # "건성" | "지성" | "복합성" | "민감성"
+    user_skin_concerns: Optional[list[str]] = None # ["주름", "미백", ...]
 
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
+class IngredientAnalysisOutput(BaseModel):
+    model_config = _camel
+    safety_score: int                    # 0–100 (높을수록 안전)
+    ingredient_analysis: list[IngredientItem]
+    summary: str                         # LLM 생성 종합 요약
+    recommendations: list[str]           # LLM 생성 사용 권고사항
+    skin_impacts: list[SkinImpactItem]   # 11개 카테고리 중 score > 0인 항목만
+
+class SkinImpactItem(BaseModel):
+    model_config = _camel
+    label: str    # "보습", "피부 장벽", "미백·톤업" 등
+    score: int    # 0–100
+    level: str    # "높음" | "중간" | "낮음"
+    color: str    # "#22c55e" | "#f59e0b" | "#ef4444"</code></pre>
+
+        <h3>루틴 분석 입출력</h3>
+        <pre><code class="language-python">class RoutineAnalysisInput(BaseModel):
+    model_config = _camel
+    product_ids: list[int]
+    routine_period: Optional[str] = "AM"  # "AM" | "PM"
+    user_skin_type: Optional[str] = None
+
+class RoutineAnalysisOutput(BaseModel):
+    model_config = _camel
+    status: str                              # "good" | "caution" | "conflict"
+    conflicting_pairs: list[ConflictingPair]
+    recommendation: str                      # LLM 생성 종합 권고
+    suggested_adjustments: list[str]         # 최대 min(충돌 쌍 수, 3)개</code></pre>
+
+        <h3>성분 추천 입출력</h3>
+        <pre><code class="language-python">class IngredientRecommendationInput(BaseModel):
+    model_config = _camel
+    skin_type: str
+    skin_concerns: list[str]
+    current_ingredients: Optional[list[str]] = None  # 현재 사용 중인 성분 (INCI명)
+
+class IngredientRecommendationOutput(BaseModel):
+    model_config = _camel
+    recommended_ingredients: list[RecommendedIngredientItem]
+    ingredients_to_avoid: list[AvoidIngredientItem]
+    summary: str</code></pre>
+
+        <!-- 성분 분석 StateGraph -->
+        <h2>성분 분석 — StateGraph 상세</h2>
+        <p><code>ingredient_agent.py</code>가 LangGraph <code>StateGraph</code>를 사용해 성분 분석을 수행합니다. 노드 4개로 구성되며, 두 번째 노드는 <code>Send</code> API를 통해 성분별로 병렬 실행됩니다.</p>
+
+        <h3>State 필드</h3>
+        <pre><code class="language-python">class IngredientAnalysisState(TypedDict):
+    product_id: int
+    user_skin_type: str
+    user_skin_concerns: list[str]
+    triaged: list[dict]                                    # 분석 대상 선별된 성분 목록
+    all_ingredients: list[dict]                            # 제품의 전체 성분 목록
+    ingredient_analyses: Annotated[list[dict], operator.add]  # 병렬 결과 누적
+    final_ingredient_analyses: list[dict]                  # 점수 계산 완료 후 최종 목록
+    safety_score: int
+    summary: str
+    recommendations: list[str]
+    skin_impacts: list[dict]</code></pre>
+
+        <div class="note-box">
+          <code>Annotated[list[dict], operator.add]</code>는 LangGraph의 병렬 노드 결과 병합 패턴입니다. <code>Send</code> API로 동시에 실행된 <code>analyze_one_ingredient</code> 노드들의 반환값이 이 필드에 자동으로 누적됩니다.
+        </div>
+
+        <h3>그래프 플로우</h3>
+        <pre><code class="language-text">START
+  └─► collect_and_triage
+        └─► [Send × N] analyze_one_ingredient  ← 성분별 병렬 실행
+              └─► aggregate_score
+                    └─► generate_summary
+                          └─► END</code></pre>
+
+        <h3>노드 1: collect_and_triage</h3>
+        <p>DB에서 제품의 전체 성분 목록을 <code>concentration_order</code> 순으로 조회합니다. 이후 LLM에게 사용자 피부 타입·고민과 대조하여 분석에 의미 있는 성분 3~10개를 선별하도록 요청합니다.</p>
+        <p>LLM이 유효하지 않은 성분명을 반환하거나 실패할 경우 <strong>폴백</strong>으로 상위 5개(<code>concentration_order</code> 기준)를 자동 선택합니다.</p>
+
+        <h3>노드 2: analyze_one_ingredient (병렬)</h3>
+        <p>라우터 함수 <code>_route_to_ingredient_analyses</code>가 <code>triaged</code> 목록을 순회하며 각 성분에 대해 <code>Send("analyze_one_ingredient", {...})</code>를 반환합니다. LangGraph가 이를 동시에 실행합니다.</p>
+        <p>각 호출에서 LLM은 해당 성분 하나에 대해 다음을 반환합니다.</p>
+        <ul>
+          <li><code>concern_score</code> (0–100): 피부 우려 점수. 높을수록 해당 성분이 이 사용자에게 부적합.</li>
+          <li><code>assessment</code>: <code>"적합"</code> | <code>"주의"</code> | <code>"부적합"</code></li>
+          <li><code>reason</code>: 평가 근거 (한국어)</li>
+        </ul>
+        <p>LLM 설정: <code>gpt-4o-mini</code>, <code>max_retries=2</code>, <code>timeout=60</code>.</p>
+
+        <h3>노드 3: aggregate_score</h3>
+        <p>병렬 분석 결과를 모아 제품 전체 안전도 점수를 계산합니다. 계산 로직은 <a href="/chapchap-wiki/philosophy/safety-score.html">안전도 점수 계산</a> 페이지에 상세히 기술되어 있습니다. 핵심 공식은 다음과 같습니다.</p>
+
+        <div class="formula-box">
+          weight = 1 / concentration_order<br/>
+          <span class="dim">multiplier: 적합=0.5, 주의=1.0, 부적합=1.5</span><br/>
+          ingredient_score = clamp(100 − concern_score × multiplier, 0, 100)<br/>
+          safety_score = Σ(ingredient_score × weight) / Σ(weight)
+        </div>
+
+        <p>각 성분의 <code>safety_level</code>은 임계값 두 개로 결정됩니다.</p>
+        <ul>
+          <li><code>CONCERN_SAFE_THRESHOLD = 34</code> 이하 → <code>"적합"</code></li>
+          <li><code>CONCERN_WARNING_THRESHOLD = 67</code> 이하 → <code>"주의"</code></li>
+          <li>그 초과 → <code>"부적합"</code></li>
+        </ul>
+
+        <h3>노드 4: generate_summary</h3>
+        <p>LLM이 성분 분석 결과 전체를 바탕으로 종합 요약(<code>summary</code>)과 사용 권고사항(<code>recommendations</code>)을 생성합니다. 이와 함께 11개 피부 영향 카테고리에 대한 <code>skin_impacts</code> 점수를 계산합니다.</p>
+
+        <h3>skin_impacts 이중 점수 체계</h3>
+        <p>각 카테고리 점수는 두 항목의 합으로 구성됩니다.</p>
+
+        <div class="formula-box">
+          ingredient_contribution (0–60)<br/>
+          <span class="dim">+ 선별 성분들이 해당 카테고리에 실제로 기여하는 정도</span><br/><br/>
+          user_relevance (0–40)<br/>
+          <span class="dim">+ 해당 카테고리가 이 사용자의 피부 타입·고민에 얼마나 관련 있는가</span><br/><br/>
+          category_score = ingredient_contribution + user_relevance
+        </div>
+
+        <p>score가 0인 카테고리는 최종 <code>skin_impacts</code> 배열에서 제외됩니다. score 60 이상이면 <code>"높음"</code>(녹색), 30 이상이면 <code>"중간"</code>(주황), 미만이면 <code>"낮음"</code>(빨강)으로 분류합니다.</p>
+
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
                 <th class="text-left px-4 py-3 font-semibold text-gray-700">카테고리</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">score ≥ 60</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">score 30–59</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">score &lt; 30</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">≥ 60</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">30–59</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">&lt; 30</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-50 text-gray-600">
@@ -135,47 +274,143 @@
           </table>
         </div>
 
-        <h2>루틴 분석 플로우</h2>
-        <pre><code class="language-text">입력: AM/PM 루틴 제품 목록 + 사용자 피부 프로필
-  └─► ReAct agent (create_react_agent)
-        ├─► Tool: get_product_ingredients      (제품 성분 조회)
-        └─► Tool: find_potentially_conflicting_ingredients (성분 충돌 탐지)
+        <p><code>skin_impacts</code>는 Spring Boot의 <code>user_product_ai_analysis</code> 테이블 <code>skin_impacts</code> 컬럼(JSONB)에 저장됩니다. JPA 엔티티에서 <code>@JdbcTypeCode(SqlTypes.JSON)</code> + <code>String</code> 타입으로 선언하며, Jackson이 직렬화·역직렬화를 담당합니다.</p>
 
-출력: status (ok / conflict / caution)</code></pre>
+        <!-- 루틴 분석 StateGraph -->
+        <h2>루틴 분석 — StateGraph 상세</h2>
+        <p><code>routine_agent.py</code>가 LangGraph StateGraph로 루틴 충돌 진단을 수행합니다. 성분 분석과 달리 첫 번째 노드에 <strong>ReAct 에이전트</strong>를 사용해 도구를 능동적으로 호출합니다.</p>
 
-        <div class="note-box">
-          <strong>분석 결과 상태:</strong>
-          <code>ok</code> — 충돌 없음,
-          <code>conflict</code> — 성분 충돌 감지 (ROUTINE_CONFLICT 알림 발송),
-          <code>caution</code> — 주의 필요 (ROUTINE_CAUTION 알림 발송)
+        <h3>State 필드</h3>
+        <pre><code class="language-python">class RoutineAnalysisState(TypedDict):
+    routine_period: str           # "AM" | "PM"
+    user_skin_type: str
+    products_str: str             # 제품명 목록 (LLM 컨텍스트용)
+    status: str                   # "good" | "caution" | "conflict"
+    has_caution: bool
+    conflicting_pairs: list[dict]
+    recommendation: str
+    suggested_adjustments: list[str]</code></pre>
+
+        <h3>ReAct 에이전트 (싱글턴)</h3>
+        <p><code>collect_conflicts</code> 노드에서 사용하는 ReAct 에이전트는 모듈 임포트 시 <strong>한 번만 생성</strong>되어 재사용됩니다.</p>
+        <pre><code class="language-python">_agent = create_react_agent(_llm(), TOOLS)  # 싱글턴 — 모듈 로드 시 1회 생성</code></pre>
+        <p>에이전트에 등록된 도구는 두 가지입니다.</p>
+        <ul>
+          <li><code>get_product_ingredients(product_id)</code>: 제품의 전 성분을 <code>concentration_order</code> 순으로 반환. <code>ingredient_id</code>도 포함해 다음 도구로 연결 가능.</li>
+          <li><code>find_potentially_conflicting_ingredients(ingredient_id_list)</code>: 성분 ID 목록의 상세 정보(INCI명, 한글명, 설명)를 반환. LLM이 이 정보로 충돌 여부를 직접 판단.</li>
+        </ul>
+
+        <h3>그래프 플로우 및 조건부 라우팅</h3>
+        <pre><code class="language-text">START
+  └─► collect_conflicts (ReAct)
+        ├─ conflicting_pairs 있음 ──► generate_recommendation
+        │                                 └─► generate_adjustments ──► END
+        └─ 없음 (good/caution) ────► recommend_complementary ──► END</code></pre>
+
+        <p>라우터 함수 <code>has_conflicts</code>가 <code>state["conflicting_pairs"]</code>의 존재 여부를 확인해 분기를 결정합니다.</p>
+
+        <h3>노드 1: collect_conflicts</h3>
+        <p>ReAct 에이전트가 루틴 내 제품들을 순회하며 도구를 자율적으로 호출, 성분 충돌 후보를 탐색합니다. 에이전트가 JSON 형식으로 결과를 반환합니다.</p>
+        <pre><code class="language-json">{ "conflicting_pairs": [...], "has_caution": true }</code></pre>
+        <p>반환 직후 <strong>한국어 이름 후처리</strong>가 실행됩니다. LLM은 INCI명만 반환하므로, 코드가 DB에 배치 쿼리(<code>_ko_name_map()</code>)를 보내 모든 충돌 쌍의 성분에 한글명을 추가합니다.</p>
+        <p>상태값은 코드가 결정론적으로 계산합니다. LLM이 판단하지 않습니다.</p>
+        <pre><code class="language-python">status = "conflict" if pairs else ("caution" if has_caution else "good")</code></pre>
+
+        <h3>노드 2: generate_recommendation (충돌 경로)</h3>
+        <p>충돌 쌍별로 자연어 설명을 생성합니다. 왜 해당 성분 조합이 문제인지, 어떤 반응이 우려되는지 LLM이 설명합니다. <code>max_tokens</code>는 충돌 쌍 수에 비례해 스케일됩니다.</p>
+        <div class="formula-box">
+          max_tokens = 2048 + len(conflicting_pairs) × 200
         </div>
 
+        <h3>노드 3: generate_adjustments (충돌 경로)</h3>
+        <p>제품명 기반으로 구체적인 조정 방안을 제안합니다. 충돌 쌍이 많더라도 사용자 피로를 줄이기 위해 최대 3개로 제한합니다.</p>
+        <pre><code class="language-python">n_items = min(len(conflicting_pairs), 3)</code></pre>
+
+        <h3>노드 (대안 경로): recommend_complementary</h3>
+        <p>충돌이 없는 경우(good/caution)에 실행됩니다. 현재 루틴을 보완할 수 있는 성분이나 제품 유형을 제안합니다.</p>
+
+        <!-- 성분 추천 파이프라인 -->
+        <h2>성분 추천 — 순차 파이프라인</h2>
+        <p>성분 추천은 StateGraph를 사용하지 않습니다. 세 단계의 함수 호출이 순서대로 실행되는 단순한 파이프라인입니다.</p>
+
+        <pre><code class="language-python">def recommend_ingredients(req: IngredientRecommendationInput):
+    # 1단계: LLM이 INCI명 5~8개 선택
+    inci_names = _select_ingredients_by_llm(req)
+
+    # 2단계: DB에 실제로 존재하는 성분만 필터링
+    verified = _verify_ingredients_in_db(inci_names)
+
+    # 3단계: 피해야 할 성분 후보 (DB 상위 100개) + LLM 최종 포매팅
+    avoid_candidates = _get_all_ingredients_from_db()
+    return _format_recommendation_by_llm(req, verified, avoid_candidates)</code></pre>
+
+        <ul>
+          <li><strong>1단계</strong>: LLM에게 사용자의 피부 타입·고민에 적합한 INCI명 5~8개를 요청합니다.</li>
+          <li><strong>2단계</strong>: DB에 없는 성분명은 모두 제거합니다. LLM이 hallucination으로 존재하지 않는 성분을 반환해도 DB 필터가 방어합니다.</li>
+          <li><strong>3단계</strong>: DB에서 검증된 추천 성분과 피해야 할 성분 후보를 모두 LLM에 전달해 최종 결과물(추천 목록·피해야 할 목록·요약)을 생성합니다.</li>
+        </ul>
+
+        <div class="note-box">
+          2단계 DB 검증이 추천 품질의 핵심 안전장치입니다. CHAPCHAP DB에 등록된 성분만 추천에 포함되므로, 사용자는 플랫폼이 실제로 데이터를 보유한 성분만 추천받습니다.
+        </div>
+
+        <!-- Spring Boot 연동 -->
         <h2>Spring Boot ↔ Python 통신</h2>
         <pre><code class="language-text">React 앱
   └─► POST /api/analysis/ingredient  (Spring Boot :8080)
-        └─► AiAnalysisService (WebClient)
+        └─► AiAnalysisService (WebClient, 비동기)
               └─► POST /analyze/ingredient  (Python FastAPI :8000)
-                    └─► LangGraph + OpenAI gpt-4o-mini</code></pre>
+                    └─► LangGraph + OpenAI gpt-4o-mini
+                          └─► IngredientAnalysisOutput (camelCase JSON)
+                                └─► AiAnalysisService 파싱 → DB 저장
+                                      └─► ApiResponse<AnalysisResultResponse></code></pre>
 
-        <ul>
-          <li>요청/응답: JSON (camelCase — Pydantic <code>alias_generator=to_camel</code>)</li>
-          <li>Spring: WebClient 비동기 HTTP 클라이언트</li>
-          <li>Python: FastAPI + Pydantic, <code>response_model_by_alias=True</code></li>
-          <li>오류 시: Spring이 <code>BusinessException</code>으로 래핑하여 클라이언트에 전달</li>
-        </ul>
+        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-6">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">항목</th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-700">내용</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-gray-600">
+              <tr>
+                <td class="px-4 py-3">Spring HTTP 클라이언트</td>
+                <td class="px-4 py-3">WebClient (비동기, Reactor 기반)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">직렬화 형식</td>
+                <td class="px-4 py-3">JSON, camelCase (Pydantic <code>alias_generator=to_camel</code>)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Python 응답 직렬화</td>
+                <td class="px-4 py-3">FastAPI <code>response_model_by_alias=True</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">AI 서비스 오류 처리</td>
+                <td class="px-4 py-3">Python에서 <code>HTTPException(500)</code> → Spring이 <code>BusinessException</code>으로 래핑</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">AI 서비스 접근</td>
+                <td class="px-4 py-3">Spring Boot에서만 직접 호출 — 프론트는 Spring API를 통해 간접 접근</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <div class="warn-box">
-          Python 모델에 <code>ConfigDict(alias_generator=to_camel, populate_by_name=True)</code>와
-          엔드포인트에 <code>response_model_by_alias=True</code>가 없으면 422 Unprocessable Entity가 발생합니다.
+          Python 모델에 <code>ConfigDict(alias_generator=to_camel, populate_by_name=True)</code>와 엔드포인트에 <code>response_model_by_alias=True</code>가 없으면 Spring이 받는 JSON 키가 snake_case가 되어 역직렬화 실패(필드 누락)로 이어집니다.
         </div>
 
-        <h2>skin_impacts 저장 구조</h2>
-        <p><code>user_product_ai_analysis</code> 테이블의 <code>skin_impacts</code> 컬럼은 JSONB 타입으로, 11개 카테고리 점수를 JSON으로 저장합니다.</p>
-
-        <div class="note-box">
-          JPA 엔티티에서 <code>@JdbcTypeCode(SqlTypes.JSON)</code> + <code>String</code> 타입으로 선언합니다.
-          Jackson이 직렬화/역직렬화를 담당합니다.
-        </div>
+        <!-- 성능 설계 -->
+        <h2>성능 설계 포인트</h2>
+        <ul>
+          <li><strong>병렬 Send API</strong>: 성분 분석에서 성분별 GPT 호출을 순차가 아닌 동시 실행. 성분 10개 기준 직렬 대비 응답 시간이 선형 단축됩니다.</li>
+          <li><strong>ReAct 에이전트 싱글턴</strong>: <code>create_react_agent</code> 객체는 모듈 로드 시 1회만 생성합니다. 요청마다 새로 만들면 LLM 클라이언트 초기화 비용이 반복됩니다.</li>
+          <li><strong>한국어 이름 배치 조회</strong>: INCI명 하나씩 DB를 조회하지 않고 <code>_ko_name_map()</code>으로 전체 이름을 한 번에 조회합니다.</li>
+          <li><strong>max_tokens 동적 스케일링</strong>: 루틴 충돌 수에 따라 토큰 한도를 조정해 짧은 루틴에서는 불필요한 토큰을 낭비하지 않습니다.</li>
+          <li><strong>LLM max_retries=2, timeout=60</strong>: OpenAI API 일시 장애 시 자동 재시도하되, 60초 이상 대기하지 않습니다.</li>
+        </ul>
 
       </div>
     </main>
