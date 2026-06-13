@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>파이프라인 명세 — CHAPCHAP Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#135bec', 'bg-light': '#f6f6f8', 'bg-dark': '#101622' },
+          fontFamily: { sans: ['Noto Sans KR', 'Manrope', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="../style.css" />
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#eff6ff',
+        primaryTextColor: '#101622',
+        primaryBorderColor: '#135bec',
+        lineColor: '#6b7280',
+        secondaryColor: '#f3f4f6',
+        tertiaryColor: '#ffffff',
+        fontFamily: 'Noto Sans KR, Manrope, sans-serif',
+        fontSize: '13px',
+        noteBkgColor: '#fefce8',
+        noteTextColor: '#78350f',
+        noteBorderColor: '#fde68a',
+        activationBkgColor: '#dbeafe',
+        activationBorderColor: '#135bec',
+      },
+      sequence: {
+        diagramMarginX: 20,
+        diagramMarginY: 20,
+        actorMargin: 60,
+        width: 150,
+        height: 40,
+        boxMargin: 10,
+        useMaxWidth: true,
+      }
+    });
+  </script>
+</head>
+<body class="bg-bg-light text-gray-800 min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-14 flex items-center px-6">
+    <a href="/chapchap-wiki/" class="flex items-center gap-2 font-bold text-lg text-bg-dark tracking-tight">
+      <span class="text-primary">CHAPCHAP</span>
+      <span class="text-gray-400 font-normal">Docs</span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="https://github.com/T1deSEC/chapchap-wiki" class="text-sm text-gray-500 hover:text-primary transition-colors flex items-center gap-1">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <div class="flex pt-14">
+    <aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-gray-200 overflow-y-auto py-4">
+      <nav>
+        <div class="sidebar-group-label">시작</div>
+        <a href="/chapchap-wiki/" class="sidebar-link">홈</a>
+        <a href="/chapchap-wiki/getting-started.html" class="sidebar-link">시작하기</a>
+        <a href="/chapchap-wiki/troubleshooting.html" class="sidebar-link">트러블슈팅</a>
+
+        <div class="sidebar-group-label mt-3">아키텍처</div>
+        <a href="/chapchap-wiki/architecture/overview.html" class="sidebar-link">개요</a>
+        <a href="/chapchap-wiki/architecture/frontend.html" class="sidebar-link">프론트엔드</a>
+        <a href="/chapchap-wiki/architecture/backend.html" class="sidebar-link">백엔드</a>
+        <a href="/chapchap-wiki/architecture/database.html" class="sidebar-link">DB 스키마</a>
+        <a href="/chapchap-wiki/architecture/ai-service.html" class="sidebar-link">AI 서비스</a>
+        <a href="/chapchap-wiki/architecture/pipeline.html" class="sidebar-link active">파이프라인 명세</a>
+        <a href="/chapchap-wiki/architecture/auth-security.html" class="sidebar-link">인증 &amp; 보안</a>
+        <a href="/chapchap-wiki/architecture/deployment.html" class="sidebar-link">배포</a>
+
+        <div class="sidebar-group-label mt-3">API 레퍼런스</div>
+        <a href="/chapchap-wiki/api/auth-user.html" class="sidebar-link">인증 &amp; 사용자</a>
+        <a href="/chapchap-wiki/api/product-ingredient.html" class="sidebar-link">제품 &amp; 성분</a>
+        <a href="/chapchap-wiki/api/routine-diary.html" class="sidebar-link">루틴 &amp; 일기</a>
+        <a href="/chapchap-wiki/api/feedback-wishlist.html" class="sidebar-link">피드백 &amp; 찜</a>
+        <a href="/chapchap-wiki/api/recommendation-analysis.html" class="sidebar-link">추천 &amp; AI 분석</a>
+        <a href="/chapchap-wiki/api/notification-home.html" class="sidebar-link">알림 &amp; 홈</a>
+        <a href="/chapchap-wiki/api/error-codes.html" class="sidebar-link">에러 코드</a>
+
+        <div class="sidebar-group-label mt-3">AI 에이전트 설계 및 철학</div>
+        <a href="/chapchap-wiki/philosophy/ingredient-ranking.html" class="sidebar-link">성분 랭킹 알고리즘</a>
+        <a href="/chapchap-wiki/philosophy/safety-score.html" class="sidebar-link">안전도 점수 계산</a>
+        <a href="/chapchap-wiki/philosophy/routine-conflict.html" class="sidebar-link">루틴 충돌 분석</a>
+      </nav>
+    </aside>
+
+    <main class="ml-60 flex-1 min-h-screen">
+      <div class="max-w-4xl mx-auto px-10 py-12">
+
+        <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
+        <h1 class="text-3xl font-bold text-bg-dark mb-2">파이프라인 명세</h1>
+        <p class="text-gray-400 text-sm mb-10">멀티 서비스 비동기 파이프라인의 생명주기 — 성공·실패 분기 및 예외 처리 흐름.</p>
+
+        <div class="note-box mb-8">
+          <strong>참여자 범례:</strong> 클라이언트(React) → Spring Boot(:8080) → FastAPI AI 서비스(:8000) → PostgreSQL(:5432) → OpenAI API. 각 파이프라인에서 트랜잭션 경계와 서비스 간 예외 전파 경로를 확인할 수 있습니다.
+        </div>
+
+        <!-- 성분 분석 -->
+        <h2 class="mt-0">성분 분석 파이프라인</h2>
+        <p><code>POST /api/analysis/ingredient</code> 요청이 Spring Boot를 거쳐 AI 서비스로 전달되고, LangGraph StateGraph가 4개 노드를 순차·병렬 실행한 뒤 결과가 DB에 저장되는 전체 흐름입니다.</p>
+
+        <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4 overflow-x-auto">
+          <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant C as 클라이언트
+    participant S as Spring Boot
+    participant AI as FastAPI
+    participant DB as PostgreSQL
+    participant LLM as OpenAI
+
+    C->>S: POST /api/analysis/ingredient
+    S->>AI: POST /analyze/ingredient (WebClient)
+
+    AI->>DB: SELECT product_ingredients<br/>WHERE product_id = ?
+    DB-->>AI: 전체 성분 목록
+
+    AI->>LLM: collect_and_triage<br/>(관련 성분 3–10개 선별)
+    LLM-->>AI: triaged 성분 목록
+
+    Note over AI,LLM: LangGraph Send API — N개 성분 병렬 실행
+    AI->>LLM: analyze_one_ingredient × N
+    LLM-->>AI: concern_score / assessment / reason (각 성분)
+
+    Note over AI: aggregate_score (결정론적 가중 평균)
+    Note over AI: safety_score · safety_level 코드 계산
+
+    AI->>LLM: generate_summary + skin_impacts
+    LLM-->>AI: summary / recommendations / skin_impacts
+
+    AI-->>S: IngredientAnalysisOutput (camelCase JSON)
+
+    S->>DB: INSERT user_product_ai_analysis<br/>(skin_impacts → JSONB)
+    DB-->>S: 저장 완료
+
+    S-->>C: ApiResponse&lt;AnalysisResultResponse&gt;
+          </div>
+        </div>
+
+        <h3>예외 처리 분기</h3>
+        <div class="bg-white rounded-xl border border-gray-100 p-6 mb-8 overflow-x-auto">
+          <div class="mermaid">
+sequenceDiagram
+    participant C as 클라이언트
+    participant S as Spring Boot
+    participant AI as FastAPI
+    participant DB as PostgreSQL
+
+    alt AI 서비스 타임아웃 / 내부 오류
+        AI-->>S: HTTPException 500
+        S-->>C: ApiResponse.error()<br/>[BusinessException → GlobalExceptionHandler]
+    else DB 저장 실패
+        S->>DB: INSERT user_product_ai_analysis
+        DB-->>S: 오류
+        Note over S: @Transactional 롤백
+        S-->>C: ApiResponse.error() [500]
+    else 잘못된 입력 (product_id 미존재 등)
+        S-->>C: ApiResponse.error()<br/>[BusinessException → 404]
+    end
+          </div>
+        </div>
+
+        <!-- 루틴 충돌 진단 -->
+        <h2>루틴 충돌 진단 파이프라인</h2>
+        <p><code>POST /api/analysis/routine</code> 요청에서 ReAct 에이전트가 DB 도구를 능동적으로 호출해 충돌을 탐지하고, 결과에 따라 알림이 자동 발송되는 흐름입니다.</p>
+
+        <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4 overflow-x-auto">
+          <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant C as 클라이언트
+    participant S as Spring Boot
+    participant AI as FastAPI
+    participant DB as PostgreSQL
+    participant LLM as OpenAI
+    participant N as NotificationService
+
+    C->>S: POST /api/analysis/routine
+    S->>AI: POST /analyze/routine (WebClient)
+
+    Note over AI,LLM: ReAct 에이전트 (싱글턴) — 도구 자율 호출
+    loop 제품별 반복
+        AI->>DB: get_product_ingredients(product_id)
+        DB-->>AI: 성분 목록 (ingredient_id 포함)
+    end
+    AI->>DB: find_potentially_conflicting_ingredients(ids)
+    DB-->>AI: 성분 상세 정보
+
+    AI->>LLM: ReAct 추론 — 충돌 판단
+    LLM-->>AI: conflicting_pairs / has_caution
+
+    Note over AI: status 결정 (결정론적)<br/>"conflict" | "caution" | "good"
+    AI->>DB: _ko_name_map() 배치 조회
+    DB-->>AI: 한글 성분명
+
+    alt status = "conflict"
+        AI->>LLM: generate_recommendation + generate_adjustments
+    else status = "caution" or "good"
+        AI->>LLM: recommend_complementary
+    end
+    LLM-->>AI: 최종 텍스트 생성
+
+    AI-->>S: RoutineAnalysisOutput (camelCase JSON)
+    S->>DB: 분석 결과 저장
+    DB-->>S: 저장 완료
+
+    alt status = "conflict"
+        S->>N: ROUTINE_CONFLICT 알림 생성
+    else status = "caution"
+        S->>N: ROUTINE_CAUTION 알림 생성
+    end
+
+    S-->>C: ApiResponse&lt;RoutineAnalysisResponse&gt;
+          </div>
+        </div>
+
+        <div class="note-box mb-8">
+          <strong>알림 발송 선행 조건:</strong> <code>NotificationService</code>는 DB 저장 성공 이후에만 호출됩니다. AI 호출 성공 후 저장이 실패하면 알림 발송이 방지되어 데이터 불일치를 방지합니다.
+        </div>
+
+        <!-- 성분 추천 -->
+        <h2>성분 추천 파이프라인</h2>
+        <p><code>POST /recommend/ingredients</code>는 StateGraph 없이 3단계 순차 함수 호출로 구성됩니다. LLM 환각 방지를 위해 DB 검증이 중간 단계에 위치합니다.</p>
+
+        <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4 overflow-x-auto">
+          <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant C as 클라이언트
+    participant S as Spring Boot
+    participant AI as FastAPI
+    participant DB as PostgreSQL
+    participant LLM as OpenAI
+
+    C->>S: POST /api/recommendation/ingredients (AI)
+    S->>AI: POST /recommend/ingredients (WebClient)
+
+    AI->>LLM: _select_ingredients_by_llm<br/>(피부 타입·고민 기반 INCI명 5–8개)
+    LLM-->>AI: INCI 성분명 목록
+
+    AI->>DB: _verify_ingredients_in_db<br/>(DB에 없는 성분 필터링)
+    DB-->>AI: 검증된 성분 목록
+
+    AI->>DB: _get_all_ingredients_from_db<br/>(기피 성분 후보 top 100)
+    DB-->>AI: 전체 성분 풀
+
+    AI->>LLM: _format_recommendation_by_llm<br/>(추천 + 기피 + 요약 생성)
+    LLM-->>AI: IngredientRecommendationOutput
+
+    AI-->>S: JSON (camelCase)
+    S-->>C: ApiResponse&lt;IngredientRecommendationResponse&gt;
+          </div>
+        </div>
+
+        <div class="note-box mb-8">
+          <strong>DB 검증 필터 (3단계):</strong> LLM이 hallucination으로 존재하지 않는 성분명을 반환해도 <code>_verify_ingredients_in_db</code>가 DB와 대조해 제거합니다. 추천 결과는 항상 플랫폼이 실제로 보유한 성분으로만 구성됩니다.
+        </div>
+
+        <!-- 공통 예외 처리 -->
+        <h2>공통 예외 처리 흐름</h2>
+        <p>세 파이프라인 모두 동일한 예외 전파 구조를 공유합니다. 서비스 경계 어디서 오류가 발생해도 클라이언트는 일관된 <code>ApiResponse</code> 구조를 수신합니다.</p>
+
+        <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4 overflow-x-auto">
+          <div class="mermaid">
+sequenceDiagram
+    participant AI as FastAPI
+    participant S as Spring Boot
+    participant GEH as GlobalExceptionHandler
+    participant C as 클라이언트
+
+    AI-->>S: HTTPException 500 (분석 실패 · 타임아웃)
+    S->>S: BusinessException 래핑
+
+    Note over GEH: @RestControllerAdvice
+    S->>GEH: 예외 전달
+
+    alt BusinessException
+        GEH-->>C: HTTP 도메인 정의 코드<br/>ApiResponse.error(message)
+    else MethodArgumentNotValidException
+        GEH-->>C: HTTP 400<br/>ApiResponse.error(검증 실패 메시지)
+    else Exception (그 외)
+        GEH-->>C: HTTP 500<br/>ApiResponse.error("서버 오류")
+    end
+          </div>
+        </div>
+
+        <div class="warn-box">
+          모든 오류 응답은 <code>&#123; "success": false, "message": "..." &#125;</code> 구조입니다. 클라이언트는 서비스 내부 구조와 무관하게 동일한 형식으로 오류를 처리할 수 있습니다.
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
