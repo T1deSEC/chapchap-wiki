@@ -69,7 +69,7 @@
 
         <p class="text-sm text-primary font-semibold uppercase tracking-widest mb-2">아키텍처</p>
         <h1 class="text-3xl font-bold text-bg-dark mb-2">배포</h1>
-        <p class="text-gray-400 text-sm mb-10">로컬 개발 환경 및 EC2 + Vercel 프로덕션 배포 가이드.</p>
+        <p class="text-gray-400 text-sm mb-10">로컬 개발 환경 및 EC2 단일 서버 프로덕션 배포 가이드.</p>
 
         <!-- ───────────────────────────── 로컬 개발 ───────────────────────────── -->
         <h2 class="mt-0">로컬 개발 환경</h2>
@@ -144,18 +144,23 @@ npm run dev    # http://localhost:5173 → /api/* 를 :8080으로 프록시</cod
               └─► OpenAI API — HTTPS</code></pre>
 
         <!-- ───────────────────────────── 프로덕션 배포 ───────────────────────────── -->
-        <h2>프로덕션 배포 (EC2 + Vercel)</h2>
+        <h2>프로덕션 배포 (EC2 단일 서버)</h2>
 
         <h3>배포 구조</h3>
-        <pre><code class="language-text">사용자
-  │
-  ├─► Vercel (프론트엔드, 정적 빌드, HTTPS)
-  │     └─► VITE_API_BASE_URL → EC2 :8080
-  │
-  └─► AWS EC2 t2.micro
-        ├─ Spring Boot :8080  (Docker, profile=full)
-        ├─ PostgreSQL  :5432  (Docker)
-        └─ Python AI   :8000  (Docker, profile=full)</code></pre>
+        <pre><code class="language-text">브라우저 → http://EC2_IP (nginx :80)
+              ├── /        → 프론트 정적 파일 (빌드된 React)
+              └── /api/*   → Spring Boot :8080 (내부 프록시)
+
+EC2 Docker 컨테이너:
+  ├─ nginx   :80    (프론트 서빙 + API 프록시)
+  ├─ api     :8080  (Spring Boot)
+  ├─ db      :5432  (PostgreSQL)
+  └─ ai      :8000  (Python FastAPI)</code></pre>
+
+        <div class="note-box">
+          브라우저 기준 프론트와 API가 같은 origin(<code>http://EC2_IP</code>)이므로
+          CORS 설정과 Mixed Content 문제가 발생하지 않습니다.
+        </div>
 
         <h3>EC2 인스턴스 설정</h3>
         <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
@@ -170,14 +175,14 @@ npm run dev    # http://localhost:5173 → /api/* 를 :8080으로 프록시</cod
               <tr><td class="px-4 py-3">AMI</td><td class="px-4 py-3">Ubuntu Server 22.04 LTS</td></tr>
               <tr><td class="px-4 py-3">Instance type</td><td class="px-4 py-3">t2.micro (프리 티어)</td></tr>
               <tr><td class="px-4 py-3">Storage</td><td class="px-4 py-3">20 GiB gp3</td></tr>
-              <tr><td class="px-4 py-3">인바운드 포트</td><td class="px-4 py-3">22 (SSH, 내 IP), 8080 (API, 0.0.0.0/0)</td></tr>
+              <tr><td class="px-4 py-3">인바운드 포트</td><td class="px-4 py-3">22 (SSH, 내 IP), <strong>80</strong> (nginx, 0.0.0.0/0)</td></tr>
               <tr><td class="px-4 py-3">탄력적 IP</td><td class="px-4 py-3">할당 권장 — 재시작 후에도 IP 고정</td></tr>
             </tbody>
           </table>
         </div>
 
         <h3>EC2 초기 환경 구성</h3>
-        <pre><code class="language-bash"># Swap 2GB 설정 (1GB RAM으로 컨테이너 3개 운용에 필수)
+        <pre><code class="language-bash"># Swap 2GB (1GB RAM으로 컨테이너 4개 운용에 필수)
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile && sudo swapon /swapfile
@@ -188,65 +193,55 @@ curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker ubuntu
 # exit 후 재접속
 
-# JDK 22 (SDKMAN)
+# JDK 22 (Spring Boot JAR 빌드용)
 curl -s "https://get.sdkman.io" | bash
 source ~/.sdkman/bin/sdkman-init.sh
-sdk install java 22.0.2-tem</code></pre>
+sdk install java 22.0.2-tem
+
+# Node.js 20 (프론트엔드 빌드용)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs git</code></pre>
 
         <div class="note-box">
-          Swap 설정을 생략하면 DB + Spring Boot + Python AI 세 컨테이너가 동시에 올라오는 시점에
+          Swap 설정을 생략하면 컨테이너 4개(nginx + api + db + ai)가 동시에 올라오는 시점에
           OOM으로 프로세스가 강제 종료됩니다.
         </div>
 
-        <h3>백엔드 배포</h3>
-        <pre><code class="language-bash">git clone https://github.com/&lt;username&gt;/CHAPCHAP-Backend.git
+        <h3>프론트엔드 빌드</h3>
+        <pre><code class="language-bash">cd ~
+git clone https://github.com/&lt;username&gt;/CHAPCHAP-Frontend.git
+cd CHAPCHAP-Frontend
+npm ci
+npm run build
+
+# nginx가 마운트하는 경로로 복사
+mkdir -p ~/CHAPCHAP-Backend/frontend-dist
+cp -r dist/* ~/CHAPCHAP-Backend/frontend-dist/</code></pre>
+
+        <h3>백엔드 배포 및 전체 스택 실행</h3>
+        <pre><code class="language-bash">cd ~
+git clone https://github.com/&lt;username&gt;/CHAPCHAP-Backend.git
 cd CHAPCHAP-Backend
 
-# .env 작성 (gitignore됨 — EC2에서 직접 생성)
+# .env 작성 (gitignore됨 — EC2에서 직접 생성, .env.example 참고)
 cat > .env &lt;&lt; 'EOF'
 JWT_SECRET=&lt;32자 이상 임의 문자열&gt;
 OPENAI_API_KEY=&lt;키&gt;
 OPENWEATHERMAP_API_KEY=&lt;키&gt;
 REGISTRATION_SECRET=&lt;가입 코드&gt;
-CORS_ALLOWED_ORIGINS=http://localhost:5173,https://&lt;vercel-url&gt;.vercel.app
+CORS_ALLOWED_ORIGINS=http://localhost:5173
 EOF
 
-# JAR 빌드 (Dockerfile이 복사 방식이므로 먼저 필요)
+# JAR 빌드
 chmod +x gradlew
 ./gradlew bootJar --no-daemon
 
-# 전체 스택 기동
+# 전체 스택 기동 (db + api + ai + nginx)
 docker compose --profile full up --build -d
 
 # 확인
 docker compose ps
-docker compose logs -f api</code></pre>
-
-        <h3>Vercel 프론트엔드 배포</h3>
-        <ol>
-          <li>vercel.com → Add New Project → 프론트엔드 GitHub 레포 선택</li>
-          <li>Framework Preset: <strong>Vite</strong> (자동 감지)</li>
-          <li>Settings → Environment Variables에 아래 추가:</li>
-        </ol>
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mb-4">
-          <table class="w-full text-sm">
-            <thead class="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">Key</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">Value</th>
-                <th class="text-left px-4 py-3 font-semibold text-gray-700">환경</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50 text-gray-600">
-              <tr>
-                <td class="px-4 py-3"><code>VITE_API_BASE_URL</code></td>
-                <td class="px-4 py-3"><code>http://&lt;EC2_PUBLIC_IP&gt;:8080</code></td>
-                <td class="px-4 py-3">Production</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>배포 완료 후 Vercel이 제공하는 URL을 EC2 <code>.env</code>의 <code>CORS_ALLOWED_ORIGINS</code>에 추가하고 <code>docker compose restart api</code>로 반영한다.</p>
+docker compose logs -f api   # "Started ChapchapApplication" 확인</code></pre>
 
         <!-- ───────────────────────────── 환경변수 ───────────────────────────── -->
         <h2>환경 변수 전체 목록</h2>
